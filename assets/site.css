@@ -1,0 +1,95 @@
+/* Ölüm Dairesi / Department of Death — ortak site stili (ana sayfa, wiki, gizlilik).
+   Oyunun kendi paleti: boşluk moru, taş grisi, kemik beyazı; mühür kırmızısı yalnızca vurgu. Tek ve bilinçli koyu tema. */
+:root{
+  --void:#141019;
+  --void-2:#0e0b12;
+  --stone:#1e1825;
+  --slate:#2a2233;
+  --slate-2:#3a2f48;
+  --ash:#9c93a8;
+  --bone:#ece4d8;
+  --seal:#d4373b;
+  --seal-dk:#7d1a1e;
+  --violet:#8b6fb0;
+  --soul:#8fd3ff;
+  --parch:#e8dcc4;
+  --ink:#2b2030;
+  --f-display:"Grenze Gotisch","Cormorant Garamond",Georgia,serif;
+  --f-body:"Alegreya Sans","Segoe UI",system-ui,sans-serif;
+  --f-pixel:"Pixelify Sans","Courier New",monospace;
+  --bar-h:64px;
+  --gut:max(16px,env(safe-area-inset-left,0px));
+  color-scheme:dark;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--bar-h) + 16px);-webkit-text-size-adjust:100%}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation:none!important;transition:none!important}}
+body{margin:0;background:var(--void);color:var(--bone);font-family:var(--f-body);font-size:17px;line-height:1.6;overflow-x:hidden}
+img{max-width:100%;height:auto}
+a{color:#c9a8f0}
+a:focus-visible,button:focus-visible,summary:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--seal);outline-offset:3px;border-radius:4px}
+.px{image-rendering:pixelated;image-rendering:crisp-edges}
+.skip{position:absolute;left:-9999px;top:8px;z-index:100;background:var(--seal);color:#fff;padding:8px 14px;border-radius:4px}
+.skip:focus{left:16px}
+
+/* Dil seçimi: ana sayfada iki dil yan yana yazılır, biri gizlenir */
+html:not([data-lang="en"]) body [lang="en"],
+html[data-lang="en"] body [lang="tr"]{display:none!important}
+
+/* Üst çubuk */
+.topbar{position:fixed;inset:0 0 auto;z-index:50;height:calc(var(--bar-h) + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);
+  background:rgba(14,11,18,.78);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(58,47,72,.7)}
+.topbar .in{max-width:1240px;height:var(--bar-h);margin:0 auto;padding:0 var(--gut);display:flex;align-items:center;gap:20px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--bone);text-decoration:none;flex:none}
+.brand img{width:34px;height:34px;border-radius:7px}
+.brand b{font-family:var(--f-display);font-weight:800;font-size:1.45rem;letter-spacing:.02em;line-height:1}
+.nav{display:flex;align-items:center;gap:4px;margin-left:auto}
+.nav a{font-family:var(--f-pixel);font-size:.82rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ash);text-decoration:none;padding:8px 10px;border-radius:4px;white-space:nowrap}
+.nav a:hover{color:var(--bone);background:rgba(255,255,255,.04)}
+.nav a[aria-current="page"]{color:var(--bone);box-shadow:inset 0 -2px 0 var(--seal)}
+.nav .sep{width:1px;height:22px;background:var(--slate-2);margin:0 8px}
+.lang{display:inline-flex;border:1px solid var(--slate-2);border-radius:999px;padding:2px;flex:none}
+.lang button{all:unset;cursor:pointer;font-family:var(--f-pixel);font-size:.75rem;letter-spacing:.1em;padding:4px 10px;border-radius:999px;color:var(--ash)}
+.lang button[aria-pressed="true"]{background:var(--bone);color:var(--void)}
+.menu-btn{all:unset;display:none;cursor:pointer;width:40px;height:40px;border-radius:6px;place-items:center;color:var(--bone)}
+.menu-btn svg{width:22px;height:22px}
+@media (max-width:980px){
+  .menu-btn{display:grid}
+  .nav{position:fixed;top:calc(var(--bar-h) + env(safe-area-inset-top,0px));left:0;right:0;flex-direction:column;align-items:stretch;gap:0;
+    background:rgba(14,11,18,.97);border-bottom:1px solid var(--slate-2);padding:8px var(--gut) 16px;display:none;max-height:calc(100vh - var(--bar-h));overflow:auto}
+  .topbar.open .nav{display:flex}
+  .nav a{padding:12px 4px;border-bottom:1px solid var(--slate);font-size:.9rem}
+  .nav .sep{display:none}
+  .topbar .lang{margin-left:auto}
+  .topbar .menu-btn{margin-left:auto}
+  .topbar .lang + .menu-btn{margin-left:0}
+}
+
+/* Düğmeler */
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--f-pixel);font-size:.95rem;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+  padding:13px 22px;border-radius:6px;border:2px solid transparent;cursor:pointer;transition:transform .12s ease,box-shadow .12s ease,background .12s ease;line-height:1.1}
+.btn svg{width:18px;height:18px;flex:none}
+.btn-seal{background:var(--seal);color:#fff;box-shadow:0 4px 0 var(--seal-dk),0 10px 30px -10px rgba(212,55,59,.7)}
+.btn-seal:hover{transform:translateY(-1px);box-shadow:0 5px 0 var(--seal-dk),0 14px 34px -10px rgba(212,55,59,.8)}
+.btn-seal:active{transform:translateY(3px);box-shadow:0 1px 0 var(--seal-dk)}
+.btn-ghost{color:var(--bone);border-color:rgba(236,228,216,.45);background:rgba(20,16,25,.45)}
+.btn-ghost:hover{border-color:var(--bone);background:rgba(236,228,216,.08)}
+
+/* Bölüm başlıkları */
+.wrap{max-width:1240px;margin:0 auto;padding-left:var(--gut);padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--f-pixel);font-size:.8rem;letter-spacing:.2em;text-transform:uppercase;color:var(--seal);margin:0 0 10px;display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--seal)}
+.h-xl{font-family:var(--f-display);font-weight:800;font-size:clamp(2.2rem,5.4vw,3.8rem);line-height:1.02;margin:0 0 14px;letter-spacing:.005em;text-wrap:balance}
+.h-lg{font-family:var(--f-display);font-weight:600;font-size:clamp(1.6rem,3.4vw,2.3rem);line-height:1.08;margin:0 0 10px;text-wrap:balance}
+.sub{color:var(--ash);font-size:1.12rem;max-width:62ch;margin:0}
+
+/* Alt bilgi */
+.foot{border-top:1px solid var(--slate);background:var(--void-2);padding:48px 0 calc(28px + env(safe-area-inset-bottom,0px));margin-top:40px;font-size:.95rem}
+.foot .cols{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:32px}
+@media (max-width:760px){.foot .cols{grid-template-columns:minmax(0,1fr)}}
+.foot h4{font-family:var(--f-pixel);font-weight:500;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--ash);margin:0 0 12px}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.foot a{color:var(--bone);text-decoration:none}
+.foot a:hover{color:#fff;text-decoration:underline;text-decoration-color:var(--seal);text-underline-offset:3px}
+.foot .tag{color:var(--ash);max-width:40ch;margin:12px 0 0}
+.foot .legal{margin-top:36px;padding-top:18px;border-top:1px solid var(--slate);display:flex;flex-wrap:wrap;gap:8px 24px;justify-content:space-between;color:var(--ash);font-size:.85rem}

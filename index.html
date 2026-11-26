@@ -1,856 +1,508 @@
-<!doctype html><html><head><meta charset="utf-8"><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
-<title>Ölüm Dairesi Wiki</title>
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Ölüm Dairesi · Azrail emekli oldu, kota seni bekliyor</title>
+<meta name="title-tr" content="Ölüm Dairesi · Azrail emekli oldu, kota seni bekliyor">
+<meta name="title-en" content="Department of Death · The Reaper retired. The quota didn't.">
+<meta name="description" content="Ölüm Dairesi (Department of Death): emekli Azrail'in yerine alınan stajyer olarak ruhları biçtiğin, belgelerini mühürlediğin ve kayıp patronun sırrını çözdüğün kara mizahlı bir incremental. SE Logic'ten Android ve PC için.">
+<meta name="theme-color" content="#141019">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Department of Death">
+<meta property="og:title" content="Ölüm Dairesi / Department of Death">
+<meta property="og:description" content="Azrail emekli oldu. Ruhları biç, mühürle, kotayı tuttur ve sırrı çöz. SE Logic'ten Android ve PC için.">
+<meta property="og:url" content="https://departmentofdeath.github.io/">
+<meta property="og:image" content="https://departmentofdeath.github.io/assets/og.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/icon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@600;800&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=Pixelify+Sans:wght@500&display=swap">
+<link rel="stylesheet" href="assets/site.css">
 <style>
-/* Layout: arşiv dosyası gibi bir wiki; solda yapışkan fihrist, sağda maddeler. Oyunun kendi paleti (mor, gri, siyah; kırmızı yalnızca vurgu). Tek ve bilinçli koyu tema. */
-:root{
-  --void:#141019;          /* kulenin asılı durduğu boşluk */
-  --stone:#1e1825;         /* kart zemini */
-  --slate:#2a2233;         /* çizgiler, tablo başlıkları */
-  --ash:#9c93a8;           /* ikincil metin */
-  --bone:#ece4d8;          /* ana metin, kemik rengi */
-  --seal:#d4373b;          /* mühür kırmızısı: yalnızca "dokun" ve vurgu */
-  --violet:#8b6fb0;        /* ruh moru */
-  --parch:#e8dcc4;         /* form kâğıdı */
-  --ink:#2b2030;
-  --f-display:"Grenze Gotisch","Cormorant Garamond",Georgia,serif;
-  --f-body:"Alegreya Sans","Segoe UI",system-ui,sans-serif;
-  --f-pixel:"Pixelify Sans","Courier New",monospace;
-  color-scheme:dark;
-}
-html{scroll-behavior:smooth;scroll-padding-top:72px}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
-body{background:var(--void);color:var(--bone);font-family:var(--f-body);font-size:17px;line-height:1.6}
-a{color:#c9a8f0}
-a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--seal);outline-offset:2px;border-radius:4px}
+/* Ana sayfa: tam ekran kahraman görseli, sonra memo, fragman, döngü, özellikler, bölgeler, kadro, galeri, basın. */
+section{padding:96px 0}
+@media (max-width:700px){section{padding:64px 0}}
 
-.wrap{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.rv.pre{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+.rv.pre.in{opacity:1;transform:none}
 
-/* Başlık bandı */
-.mast{border-bottom:1px solid var(--slate);background:linear-gradient(180deg,#1b1422 0%,var(--void) 100%);margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px)}
-.mast .wrap{padding-block:28px 22px;display:flex;flex-wrap:wrap;gap:8px 24px;align-items:end;justify-content:space-between}
-.mast h1{font-family:var(--f-display);font-weight:800;font-size:clamp(2.4rem,6vw,3.6rem);line-height:1;margin:0;letter-spacing:.01em;text-wrap:balance}
-.mast h1 small{display:block;font-family:var(--f-pixel);font-size:.9rem;letter-spacing:.14em;color:var(--ash);margin-top:10px;text-transform:uppercase}
-.stamp{font-family:var(--f-pixel);color:var(--seal);border:2px solid var(--seal);padding:4px 10px;transform:rotate(-4deg);display:inline-block;letter-spacing:.12em;font-size:.85rem;opacity:.9}
-
-/* İki sütun */
-.grid{display:grid;grid-template-columns:220px minmax(0,1fr);gap:40px;padding-block:28px 80px}
-nav.toc{position:sticky;top:calc(env(safe-area-inset-top,0px) + 16px);align-self:start;max-height:calc(100vh - 32px);overflow:auto;font-size:.95rem}
-nav.toc .lbl{font-family:var(--f-pixel);font-size:.75rem;letter-spacing:.16em;color:var(--ash);text-transform:uppercase;margin-bottom:8px}
-nav.toc ol{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px;counter-reset:t}
-nav.toc a{display:block;padding:5px 10px;border-left:2px solid var(--slate);color:var(--bone);text-decoration:none}
-nav.toc a:hover{border-left-color:var(--seal);background:var(--stone)}
-nav.toc a span{font-family:var(--f-pixel);color:var(--ash);font-size:.75rem;margin-right:8px}
-
-@media (max-width:860px){
-  .grid{grid-template-columns:minmax(0,1fr);gap:20px}
-  nav.toc{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--void);max-height:none;margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--slate)}
-  nav.toc .lbl{display:none}
-  nav.toc ol{flex-direction:row;overflow-x:auto;gap:6px;scrollbar-width:none}
-  nav.toc a{white-space:nowrap;border:1px solid var(--slate);border-radius:999px;padding:4px 12px}
-  nav.toc a span{display:none}
-  body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--void)}
+/* Kahraman */
+.hero{position:relative;min-height:min(92vh,980px);display:flex;align-items:center;padding:calc(var(--bar-h) + 48px) 0 120px;overflow:hidden;isolation:isolate}
+.hero-bg{position:absolute;inset:0;z-index:-2;background:#1b1626}
+.hero-bg img{width:100%;height:100%;object-fit:cover;object-position:72% 40%;animation:drift 26s ease-out both}
+@keyframes drift{from{transform:scale(1.08)}to{transform:scale(1)}}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;
+  background:linear-gradient(90deg,rgba(14,11,18,.95) 0%,rgba(14,11,18,.84) 36%,rgba(14,11,18,.2) 62%,rgba(14,11,18,0) 100%),
+             linear-gradient(0deg,var(--void) 0%,rgba(20,16,25,0) 26%)}
+.hero .wrap{width:100%}
+.hero-copy{max-width:600px}
+.hero-logo{display:block;width:min(520px,88%);height:auto;margin:0 0 26px;filter:drop-shadow(0 10px 24px rgba(0,0,0,.55))}
+.hero h1{font-family:var(--f-display);font-weight:600;font-size:clamp(1.7rem,3.6vw,2.5rem);line-height:1.1;margin:0 0 14px;color:var(--bone);text-wrap:balance}
+.hero p.lede{font-size:1.15rem;color:#d9d0e2;max-width:52ch;margin:0 0 30px}
+.cta{display:flex;flex-wrap:wrap;gap:14px;margin-bottom:34px}
+.plat{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.plat .lbl{font-family:var(--f-pixel);font-size:.75rem;letter-spacing:.16em;color:var(--ash);text-transform:uppercase;margin-right:4px}
+.chip{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border:1px solid rgba(236,228,216,.25);border-radius:999px;background:rgba(14,11,18,.55);font-size:.95rem}
+.chip svg{width:16px;height:16px;flex:none}
+.chip em{font-style:normal;font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.12em;color:var(--seal);text-transform:uppercase}
+.scroll-cue{position:absolute;left:50%;bottom:28px;transform:translateX(-50%);color:var(--ash);font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;text-decoration:none;display:flex;flex-direction:column;align-items:center;gap:6px}
+.scroll-cue span{width:2px;height:28px;background:linear-gradient(var(--seal),transparent);animation:cue 1.8s ease-in-out infinite}
+@keyframes cue{0%,100%{transform:scaleY(.4);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}}
+@media (max-width:760px){
+  .hero{min-height:0;align-items:flex-end;padding-top:calc(var(--bar-h) + 200px);padding-bottom:64px}
+  .hero-bg img{object-position:78% 30%}
+  .hero::before{background:linear-gradient(0deg,var(--void) 8%,rgba(20,16,25,.88) 48%,rgba(20,16,25,.25) 78%,rgba(20,16,25,.1) 100%)}
+  .scroll-cue{display:none}
 }
 
-main{min-width:0}
-section{padding-block:8px 36px;border-bottom:1px dashed var(--slate);margin-bottom:28px}
-section:last-of-type{border-bottom:0}
-h2{font-family:var(--f-display);font-weight:600;font-size:clamp(1.8rem,4vw,2.3rem);line-height:1.1;margin:0 0 6px;text-wrap:balance}
-h2 .no{font-family:var(--f-pixel);font-size:.9rem;color:var(--seal);letter-spacing:.1em;display:block;margin-bottom:6px}
-h3{font-family:var(--f-body);font-weight:700;font-size:1.2rem;margin:26px 0 8px;color:var(--parch)}
-p,li{max-width:68ch}
-.lead{font-size:1.15rem;color:var(--parch)}
-.muted{color:var(--ash)}
-.term{font-family:var(--f-pixel);font-size:.9em;color:var(--parch);background:var(--slate);padding:0 6px;border-radius:3px;white-space:nowrap}
+/* Memo ve rakamlar */
+.premise{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:56px;align-items:center}
+@media (max-width:900px){.premise{grid-template-columns:minmax(0,1fr);gap:40px}}
+.memo{position:relative;background:var(--parch);color:var(--ink);border-radius:3px;padding:30px 30px 34px;transform:rotate(-1.2deg);
+  box-shadow:0 1px 0 #fff8 inset,0 30px 60px -20px rgba(0,0,0,.7),0 0 0 1px #c9b994;
+  background-image:repeating-linear-gradient(0deg,transparent 0 31px,rgba(43,32,48,.08) 31px 32px)}
+.memo::before{content:"";position:absolute;top:-12px;left:50%;width:110px;height:24px;transform:translateX(-50%) rotate(2deg);background:rgba(236,228,216,.55);box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.memo .mh{font-family:var(--f-pixel);font-size:.78rem;letter-spacing:.18em;text-transform:uppercase;border-bottom:2px solid var(--ink);padding-bottom:10px;margin-bottom:14px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.memo dl{display:grid;grid-template-columns:auto 1fr;gap:4px 14px;margin:0 0 16px;font-size:.98rem}
+.memo dt{font-family:var(--f-pixel);font-size:.8rem;letter-spacing:.08em;color:#6a5a6e;padding-top:2px}
+.memo dd{margin:0;font-weight:500}
+.memo p{margin:0 0 12px;font-size:1.06rem;line-height:1.55}
+.memo .sig{font-family:var(--f-display);font-size:1.5rem;margin-top:18px}
+.memo .seal{position:absolute;right:18px;bottom:16px;font-family:var(--f-pixel);color:var(--seal);border:3px solid var(--seal);border-radius:4px;padding:6px 12px;font-size:1rem;letter-spacing:.14em;transform:rotate(-9deg);opacity:.85;mix-blend-mode:multiply}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:30px}
+.stat{background:var(--stone);border:1px solid var(--slate);border-radius:8px;padding:16px 18px}
+.stat b{display:block;font-family:var(--f-display);font-weight:800;font-size:2.4rem;line-height:1;color:var(--bone)}
+.stat span{color:var(--ash);font-size:.95rem}
 
-/* Bilgi kutusu */
-.intro{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:28px;align-items:start}
-@media (max-width:980px){.intro{grid-template-columns:minmax(0,1fr)}}
-.infobox{background:var(--stone);border:1px solid var(--slate);border-radius:6px;overflow:hidden}
-.infobox img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
-.infobox dl{margin:0;padding:12px 16px;display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.95rem}
-.infobox dt{color:var(--ash)}
-.infobox dd{margin:0}
-.infobox .cap{font-family:var(--f-display);font-size:1.4rem;padding:10px 16px 0}
+/* Fragman */
+.trailer{background:radial-gradient(ellipse at 50% 0%,#231b2d 0%,var(--void) 70%)}
+.trailer .head{text-align:center;max-width:720px;margin:0 auto 34px}
+.trailer .head .eyebrow{justify-content:center}
+.trailer .head .eyebrow::after{content:"";width:22px;height:2px;background:var(--seal)}
+.trailer .head .sub{margin:0 auto}
+.screen{max-width:1040px;margin:0 auto;border-radius:10px;overflow:hidden;border:1px solid var(--slate-2);box-shadow:0 40px 90px -30px rgba(0,0,0,.85),0 0 0 6px rgba(42,34,51,.5)}
+.screen video{display:block;width:100%;aspect-ratio:16/9;background:#000}
 
-figure{margin:16px 0}
-figure img{display:block;width:100%;max-width:100%;border-radius:4px;border:1px solid var(--slate);image-rendering:auto}
-figcaption{font-size:.88rem;color:var(--ash);margin-top:6px}
-.shots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-@media (max-width:620px){.shots{grid-template-columns:minmax(0,1fr)}}
-.shots figure{margin:0}
+/* Döngü */
+.loop{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:40px}
+@media (max-width:900px){.loop{grid-template-columns:minmax(0,1fr)}}
+.step{background:var(--stone);border:1px solid var(--slate);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
+.step img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-bottom:1px solid var(--slate)}
+.step .tx{padding:20px 22px 24px}
+.step .n{font-family:var(--f-pixel);color:var(--seal);font-size:.8rem;letter-spacing:.16em}
+.step h3{font-family:var(--f-display);font-weight:800;font-size:2rem;line-height:1;margin:6px 0 10px}
+.step p{margin:0;color:#d2c9da}
 
-/* Tablolar */
-.tbl{overflow-x:auto;margin:12px 0;border:1px solid var(--slate);border-radius:6px}
-table{border-collapse:collapse;width:100%;font-size:.95rem;min-width:520px}
-th,td{text-align:left;padding:8px 12px;border-bottom:1px solid var(--slate);vertical-align:top}
-th{background:var(--slate);font-weight:700;color:var(--parch);font-size:.85rem;letter-spacing:.04em}
-tr:last-child td{border-bottom:0}
-td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+/* Özellik satırları */
+.feat{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:56px;align-items:center;margin-top:88px}
+.feat:first-of-type{margin-top:48px}
+.feat.flip .media{order:2}
+@media (max-width:900px){.feat,.feat.flip{grid-template-columns:minmax(0,1fr);gap:24px;margin-top:64px}.feat.flip .media{order:0}}
+.feat .media img{display:block;width:100%;border-radius:10px;border:1px solid var(--slate-2);box-shadow:0 30px 60px -28px rgba(0,0,0,.8)}
+.feat ul{margin:16px 0 0;padding:0;list-style:none;display:grid;gap:8px}
+.feat li{padding-left:24px;position:relative;color:#d2c9da}
+.feat li::before{content:"";position:absolute;left:2px;top:.62em;width:9px;height:9px;background:var(--seal);transform:rotate(45deg)}
+.stage{background:radial-gradient(ellipse at 50% 85%,#3a2f48 0%,#1c1624 62%);border:1px solid var(--slate-2);border-radius:10px;padding:28px 18px 18px;box-shadow:0 30px 60px -28px rgba(0,0,0,.8)}
+.ranks{display:flex;align-items:flex-end;justify-content:space-between;gap:6px}
+.ranks figure{margin:0;flex:1;display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center}
+.ranks img{width:auto;height:clamp(70px,11vw,120px)}
+.ranks figcaption{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.06em;color:var(--ash);line-height:1.2}
+.ranks figure:last-child figcaption{color:var(--seal)}
+.crew{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:20px}
+.crew figure{margin:0;background:rgba(14,11,18,.5);border:1px solid var(--slate);border-radius:8px;padding:12px 6px;text-align:center}
+.crew img{height:64px;width:auto}
+.crew figcaption{font-size:.82rem;color:var(--ash);line-height:1.25;margin-top:4px}
 
-/* Döngü şeridi */
-.loop{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:18px 0;padding:0;list-style:none;counter-reset:s}
-@media (max-width:700px){.loop{grid-template-columns:repeat(2,minmax(0,1fr))}}
-.loop li{background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:12px 14px;counter-increment:s}
-.loop li::before{content:counter(s);font-family:var(--f-pixel);color:var(--seal);display:block;font-size:1.1rem}
-.loop b{display:block;color:var(--parch)}
-.loop span{font-size:.9rem;color:var(--ash)}
+/* Bölgeler */
+.regions{background:linear-gradient(180deg,var(--void) 0%,#17121d 100%)}
+.rgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+@media (max-width:980px){.rgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:620px){.rgrid{grid-template-columns:minmax(0,1fr)}}
+.region{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--slate-2);background:#000;aspect-ratio:16/10}
+.region img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .6s ease}
+.region:hover img{transform:scale(1.04)}
+.region::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,8,13,.95) 0%,rgba(10,8,13,.55) 42%,rgba(10,8,13,0) 70%)}
+.region .tx{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:16px 18px}
+.region .k{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.14em;color:var(--seal);text-transform:uppercase}
+.region h3{font-family:var(--f-display);font-weight:800;font-size:1.7rem;line-height:1.05;margin:2px 0 4px}
+.region p{margin:0;font-size:.95rem;color:#d2c9da;line-height:1.35}
 
-/* Mühür çubuğu */
-.bar{display:flex;height:26px;border-radius:4px;overflow:hidden;border:1px solid var(--slate);margin:10px 0 4px;max-width:520px;font-family:var(--f-pixel);font-size:.75rem}
-.bar div{display:flex;align-items:center;justify-content:center;color:var(--void)}
-.bar .x{background:#4a4054;color:var(--bone)}
-.bar .g{background:#b6a4c9}
-.bar .p{background:var(--seal);color:#fff}
+/* Kadro */
+.cast{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px;margin-top:40px}
+@media (max-width:980px){.cast{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.cast{grid-template-columns:minmax(0,1fr)}}
+.who{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px;align-items:start;background:var(--stone);border:1px solid var(--slate);border-radius:10px;padding:16px}
+.who .pic{width:96px;height:96px;border-radius:8px;background:radial-gradient(circle at 50% 62%,#3f3350 0%,#1f1828 72%);display:grid;place-items:center;overflow:hidden}
+.who .pic img{width:88px;height:88px;object-fit:contain}
+.who h3{font-family:var(--f-display);font-weight:600;font-size:1.45rem;line-height:1.05;margin:0}
+.who .role{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.12em;color:var(--violet);text-transform:uppercase;margin:4px 0 6px}
+.who p{margin:0;font-size:.95rem;color:#d2c9da;line-height:1.45}
 
-/* Bölge kartları */
-.regions{display:grid;gap:22px}
-.region{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px;background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:14px}
-@media (max-width:760px){.region{grid-template-columns:minmax(0,1fr)}}
-.region img{width:100%;border-radius:4px;display:block}
-.region h3{margin:0 0 4px;font-family:var(--f-display);font-weight:600;font-size:1.6rem;color:var(--bone)}
-.region .rk{font-family:var(--f-pixel);font-size:.8rem;color:var(--ash);letter-spacing:.08em}
-.region dl{margin:10px 0 0;display:grid;grid-template-columns:auto 1fr;gap:4px 12px;font-size:.95rem}
-.region dt{color:var(--ash)}
-.region dd{margin:0}
+/* Galeri */
+.gal{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:36px}
+@media (max-width:820px){.gal{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gal a{display:block;border-radius:8px;overflow:hidden;border:1px solid var(--slate-2);position:relative;background:#000}
+.gal img{display:block;width:100%;height:100%;aspect-ratio:16/9;object-fit:cover;transition:transform .4s ease,opacity .3s}
+.gal a:hover img{transform:scale(1.035);opacity:.9}
+#lb{position:fixed;inset:0;z-index:80;background:rgba(8,6,10,.94);display:grid;place-items:center;padding:56px 12px}
+#lb[hidden]{display:none}
+#lb img{max-width:min(1600px,100%);max-height:calc(100vh - 120px);border-radius:6px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+#lb button{all:unset;cursor:pointer;position:absolute;color:var(--bone);font-family:var(--f-pixel);display:grid;place-items:center;width:48px;height:48px;border-radius:50%;background:rgba(42,34,51,.8)}
+#lb button:hover{background:var(--seal)}
+#lb .lb-x{top:max(12px,env(safe-area-inset-top,0px));right:12px;font-size:1.2rem}
+#lb .lb-prev{left:12px;top:50%;transform:translateY(-50%)}
+#lb .lb-next{right:12px;top:50%;transform:translateY(-50%)}
+#lb .lb-cap{position:absolute;bottom:18px;left:0;right:0;text-align:center;font-family:var(--f-pixel);font-size:.8rem;color:var(--ash);letter-spacing:.12em}
 
-/* Oda kartları */
-.rooms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
-@media (max-width:760px){.rooms{grid-template-columns:minmax(0,1fr)}}
-.room{background:var(--stone);border:1px solid var(--slate);border-radius:6px;overflow:hidden;display:flex;flex-direction:column}
-.room img{width:100%;display:block;aspect-ratio:16/9;object-fit:cover}
-.room .b{padding:12px 14px;display:flex;flex-direction:column;gap:6px}
-.room h4{margin:0;font-size:1.1rem;color:var(--parch)}
-.room p{margin:0;font-size:.95rem}
-.room .tag{font-family:var(--f-pixel);font-size:.75rem;color:var(--ash)}
+/* Çağrı bandı */
+.band{position:relative;overflow:hidden;isolation:isolate;text-align:center;padding:110px 0}
+.band::before{content:"";position:absolute;inset:0;z-index:-2;background:url(assets/clouds.webp) center/cover}
+.band::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,var(--void) 0%,rgba(20,16,25,.55) 30%,rgba(20,16,25,.55) 70%,var(--void) 100%)}
+.band .seal-big{width:84px;height:84px;margin:0 auto 18px;border-radius:50%;background:radial-gradient(circle at 38% 35%,#ef5a5d 0%,var(--seal) 42%,#8e1f23 100%);display:grid;place-items:center;box-shadow:0 8px 0 rgba(0,0,0,.25),0 0 50px rgba(212,55,59,.45)}
+.band .seal-big svg{width:42px;height:42px;color:#5c1215}
+.band .h-xl{margin-bottom:10px}
+.band .sub{margin:0 auto 30px;color:#d9d0e2}
+.band .plat{justify-content:center}
 
-/* Son Sözler kartları */
-.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-@media (max-width:760px){.cards{grid-template-columns:minmax(0,1fr)}}
-.card{background:var(--parch);color:var(--ink);border-radius:4px;padding:14px 16px;position:relative;box-shadow:0 2px 0 #00000055}
-.card q{font-style:italic;display:block;font-size:1rem}
-.card .who{font-family:var(--f-pixel);font-size:.8rem;margin-top:8px;color:#5a4a5e}
-.card .r{position:absolute;top:8px;right:10px;font-family:var(--f-pixel);font-size:.7rem;color:#7a6a7e}
-
-/* Başarımlar */
-.ach{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;list-style:none;padding:0;margin:14px 0}
-@media (max-width:860px){.ach{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media (max-width:460px){.ach{grid-template-columns:minmax(0,1fr)}}
-.ach li{background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:10px 12px;display:flex;flex-direction:column;gap:2px;min-width:0}
-.ach b{color:var(--parch)}
-.ach i{font-style:normal;font-size:.8rem;color:var(--ash)}
-.ach span{font-size:.92rem}
-
-/* Spoiler */
-details.spoil{background:#1a1020;border:1px solid #4a2530;border-radius:6px;margin:16px 0}
-details.spoil summary{cursor:pointer;padding:12px 16px;font-weight:700;color:var(--seal);list-style:none;display:flex;gap:10px;align-items:center}
-details.spoil summary::-webkit-details-marker{display:none}
-details.spoil summary::before{content:"▶";font-size:.7rem;transition:transform .15s}
-details.spoil[open] summary::before{transform:rotate(90deg)}
-details.spoil summary em{font-style:normal;font-weight:400;color:var(--ash);font-size:.9rem}
-details.spoil > div{padding:0 16px 14px}
-.blur{filter:blur(5px);cursor:pointer;transition:filter .2s;user-select:none}
-.blur.on{filter:none;user-select:auto}
-
-.note{border-left:3px solid var(--violet);padding:8px 14px;background:var(--stone);border-radius:0 6px 6px 0;margin:14px 0;font-size:.95rem}
-footer{color:var(--ash);font-size:.85rem;padding-block:30px;border-top:1px solid var(--slate)}
-
-/* Karakter galerisi ve sprite'lar (v2) */
-.px{image-rendering:pixelated;image-rendering:crisp-edges}
-.cast{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin:16px 0}
-@media (max-width:760px){.cast{grid-template-columns:minmax(0,1fr)}}
-.who-card{display:grid;grid-template-columns:120px minmax(0,1fr);gap:14px;background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:12px;align-items:start}
-.who-card .pic{width:120px;height:120px;background:radial-gradient(circle at 50% 60%,#3a2f48 0%,#211a29 70%);border-radius:4px;display:flex;align-items:center;justify-content:center;overflow:hidden}
-.who-card .pic img{max-width:110px;max-height:110px;width:auto;height:auto;border:0}
-.who-card h4{margin:0;font-family:var(--f-display);font-weight:600;font-size:1.45rem;color:var(--bone);line-height:1.1}
-.who-card .alias{font-family:var(--f-pixel);font-size:.75rem;color:var(--ash);letter-spacing:.06em}
-.who-card p{margin:6px 0 0;font-size:.95rem}
-.who-card .role{font-size:.85rem;color:var(--violet);margin-top:6px}
-.lineup{display:flex;flex-wrap:wrap;gap:12px;margin:14px 0;list-style:none;padding:0}
-.lineup li{background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1 1 110px;max-width:160px;text-align:center;font-size:.88rem}
-.lineup li img{height:96px;width:auto;max-width:100%}
-.lineup li b{color:var(--parch);font-size:.92rem}
-.lineup li span{color:var(--ash);font-size:.8rem;line-height:1.3}
-td.sp{width:64px;text-align:center;vertical-align:middle}
-td.sp img{height:40px;width:auto;display:inline-block}
-.items{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:8px;list-style:none;padding:0;margin:12px 0}
-.items li{background:var(--stone);border:1px solid var(--slate);border-radius:6px;padding:8px 10px;font-size:.9rem;display:flex;justify-content:space-between;gap:8px}
-.items li span{color:var(--ash);font-variant-numeric:tabular-nums;white-space:nowrap}
-.achgrp{font-family:var(--f-pixel);font-size:.8rem;color:var(--ash);letter-spacing:.1em;text-transform:uppercase;margin:22px 0 4px}
-.new{font-family:var(--f-pixel);font-size:.7rem;color:#fff;background:var(--seal);padding:1px 6px;border-radius:3px;margin-left:8px;vertical-align:middle;letter-spacing:.06em}
+/* Basın */
+.press{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;margin-top:36px}
+@media (max-width:900px){.press{grid-template-columns:minmax(0,1fr)}}
+.facts{background:var(--stone);border:1px solid var(--slate);border-radius:10px;overflow:hidden}
+.facts dl{margin:0;display:grid;grid-template-columns:auto 1fr}
+.facts dt,.facts dd{padding:11px 18px;border-bottom:1px solid var(--slate);margin:0}
+.facts dt{font-family:var(--f-pixel);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ash);padding-top:14px}
+.facts dl > :nth-last-child(-n+2){border-bottom:0}
+.quote{font-family:var(--f-display);font-weight:600;font-size:1.45rem;line-height:1.25;border-left:3px solid var(--seal);padding:4px 0 4px 18px;margin:0 0 24px;color:var(--bone)}
+.dl{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:8px}
+.dl a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--stone);border:1px solid var(--slate);border-radius:8px;color:var(--bone);text-decoration:none}
+.dl a:hover{border-color:var(--seal)}
+.dl a small{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.1em;color:var(--ash);white-space:nowrap}
 </style>
+</head>
+<body>
+<a class="skip" href="#main"><span lang="tr">İçeriğe geç</span><span lang="en">Skip to content</span></a>
 
-<header class="mast">
-  <div class="wrap">
-    <h1>Ölüm Dairesi Wiki<small>Department of Death · resmî oyuncu rehberi</small></h1>
-    <span class="stamp">DOSYA NO. 2.847.113</span>
+<header class="topbar">
+  <div class="in">
+    <a class="brand" href="index.html" aria-label="Ölüm Dairesi"><img src="assets/favicon.png" alt="" width="34" height="34"><b><span lang="tr">Ölüm Dairesi</span><span lang="en">Department of Death</span></b></a>
+    <nav class="nav" id="nav" aria-label="Site">
+      <a href="#oyun"><span lang="tr">Oyun</span><span lang="en">Game</span></a>
+      <a href="#fragman"><span lang="tr">Fragman</span><span lang="en">Trailer</span></a>
+      <a href="#bolgeler"><span lang="tr">Bölgeler</span><span lang="en">Regions</span></a>
+      <a href="#galeri"><span lang="tr">Galeri</span><span lang="en">Gallery</span></a>
+      <a href="#basin"><span lang="tr">Basın</span><span lang="en">Press</span></a>
+      <i class="sep" aria-hidden="true"></i>
+      <a href="wiki.html">Wiki</a>
+      <a href="privacy.html"><span lang="tr">Gizlilik</span><span lang="en">Privacy</span></a>
+    </nav>
+    <div class="lang" role="group" aria-label="Dil / Language"><button type="button" data-l="tr" aria-pressed="true">TR</button><button type="button" data-l="en" aria-pressed="false">EN</button></div>
+    <button class="menu-btn" type="button" aria-controls="nav" aria-expanded="false" aria-label="Menü"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button>
   </div>
 </header>
 
-<div class="wrap grid">
-<nav class="toc" aria-label="İçindekiler">
-  <div class="lbl">Fihrist</div>
-  <ol>
-    <li><a href="#oyun"><span>01</span>Oyun hakkında</a></li>
-    <li><a href="#hikaye"><span>02</span>Hikâye</a></li>
-    <li><a href="#bolum0"><span>03</span>Bölüm 0: İlk Mesai</a></li>
-    <li><a href="#karakterler"><span>04</span>Karakterler</a></li>
-    <li><a href="#nasil"><span>05</span>Nasıl oynanır</a></li>
-    <li><a href="#ruhlar"><span>06</span>Ruh tipleri</a></li>
-    <li><a href="#bolgeler"><span>07</span>Bölgeler ve rütbeler</a></li>
-    <li><a href="#patronlar"><span>08</span>Patron ruhlar</a></li>
-    <li><a href="#kule"><span>09</span>Kule ve odalar</a></li>
-    <li><a href="#gelistirme"><span>10</span>Geliştirmeler</a></li>
-    <li><a href="#yetenekler"><span>11</span>Yetenekler</a></li>
-    <li><a href="#sokak"><span>12</span>Sokak, bakkal, lağım</a></li>
-    <li><a href="#koleksiyon"><span>13</span>Son Sözler ve Dosya 0001</a></li>
-    <li><a href="#basarimlar"><span>14</span>Onur Duvarı</a></li>
-    <li><a href="#ebedi"><span>15</span>Ebedi Mesai</a></li>
-    <li><a href="#ayarlar"><span>16</span>Ayarlar</a></li>
-    <li><a href="#ipuclari"><span>17</span>İpuçları</a></li>
-    <li><a href="#gizlilik"><span>18</span>Gizlilik politikası</a></li>
-  </ol>
-</nav>
+<main id="main">
 
-<main>
-
-<section id="oyun">
-  <h2><span class="no">01 · MADDE</span>Oyun hakkında</h2>
-  <div class="intro">
-    <div>
-      <p class="lead"><b>Ölüm Dairesi</b> (İngilizce adı <i>Department of Death</i>), SE Logic'in geliştirdiği kara mizahlı, aktif bir incremental oyun. Emekli olup ortadan kaybolan Azrail'in yerine alınan stajyer olarak ruhları biçer, ofis kulesinde mühürler, aylık kotayı tutturur ve rütbe rütbe yükselirsiniz.</p>
-      <p>Oyun iki ekran arasında geçer. <b>Dünya</b>'da kum saati dolan kişileri biçip kaçan ruhlarını ağla yakalarsınız. Boşlukta süzülen <b>ofis kulesi</b>'nde ise o ruhların öbür tarafa geçiş belgelerini zamanlamalı bir dokunuşla mühürlersiniz. Ay süresi iki ekranda da akar ve ay sonunda yalnızca mühürlenmiş ruhlar kotaya sayılır. Bu yüzden oyun boyunca kendinize hep aynı soruyu sorarsınız: biraz daha mı biçsem, yoksa ofise dönüp mühürlesem mi?</p>
-      <p>Oyun açıkken oynanır. Uygulama kapalıyken ilerleme ya da çevrimdışı kazanç yoktur. Oyun bir sonu olan hikâyeye sahiptir; finalden sonra sınırsız bir mod açılır.</p>
-      <div class="note">Bu sayfa oyunun geliştirme sürümüne göre yazıldı ve 26 Kasım 2026'da güncellendi. Sayılar ve isimler çıkışa kadar değişebilir. Yeni eklenen bölümler <span class="new">YENİ</span> etiketi taşıyor. Hikâyenin sürprizleri <b style="color:var(--seal)">kırmızı spoiler kutularında</b> gizli; açmadıkça görünmez.</div>
+<!-- KAHRAMAN -->
+<div class="hero">
+  <div class="hero-bg"><img src="assets/hero.webp" srcset="assets/hero_s.webp 1280w, assets/hero.webp 2560w" sizes="100vw" alt="" class="px" fetchpriority="high"></div>
+  <div class="wrap">
+    <div class="hero-copy">
+      <img class="hero-logo px" lang="tr" src="assets/logo_tr.png" alt="Ölüm Dairesi" width="807" height="300">
+      <img class="hero-logo px" lang="en" src="assets/logo_en.png" alt="Department of Death" width="1026" height="264">
+      <h1><span lang="tr">Azrail emekli oldu. Kota seni bekliyor.</span><span lang="en">The Reaper retired. The quota didn't.</span></h1>
+      <p class="lede" lang="tr">Ruhları biç, kaçanları ağınla yakala, ölüm belgelerini tam zamanında mühürle. Kara mizahlı, aktif bir incremental oyun: kotayı tuttur, terfi et ve kayıp Azrail'in sırrını çöz.</p>
+      <p class="lede" lang="en">Reap souls, net the runaways and stamp their death certificates at the perfect moment. A darkly funny active incremental: meet the quota, climb the ranks and solve the mystery of the missing Reaper.</p>
+      <div class="cta">
+        <a class="btn btn-seal" href="#fragman"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg><span lang="tr">Fragmanı izle</span><span lang="en">Watch trailer</span></a>
+        <a class="btn btn-ghost" href="wiki.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg><span lang="tr">Wiki'yi keşfet</span><span lang="en">Explore the wiki</span></a>
+      </div>
+      <div class="plat">
+        <span class="lbl"><span lang="tr">Yakında</span><span lang="en">Coming soon</span></span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.5v17l9.2-8.5zM14.6 13.3l2.4 2.2-10 5.6zM17 8.5l-2.4 2.2L7 2.9zM18.3 9.3 21 12l-2.7 2.7-2.6-2.7z"/></svg>Google Play</span>
+        <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Steam · PC</span>
+      </div>
     </div>
-    <aside class="infobox">
-      <img src="img/01_title.webp" alt="Department of Death ana menüsü: gotik köy önünde oyun logosu ve Devam, Yeni Oyun, Hikâyeyi İzle, Ayarlar butonları">
-      <div class="cap">Department of Death</div>
-      <dl>
-        <dt>Geliştirici</dt><dd>SE Logic</dd>
-        <dt>Tür</dt><dd>Aktif incremental, hafif yönetim</dd>
-        <dt>Görünüm</dt><dd>2D HD piksel art, gotik çizgi film</dd>
-        <dt>Ekran</dt><dd>Yatay</dd>
-        <dt>Platform</dt><dd>Önce Android (Google Play), sonra PC (Steam)</dd>
-        <dt>Motor</dt><dd>Godot 4</dd>
-        <dt>Diller</dt><dd>Türkçe, İngilizce</dd>
-        <dt>Başarım</dt><dd>46 (Google Play Games, Steam)</dd>
-        <dt>Durum</dt><dd>Geliştiriliyor</dd>
-      </dl>
-    </aside>
   </div>
-</section>
-
-<section id="hikaye">
-  <h2><span class="no">02 · MADDE</span>Hikâye</h2>
-  <p>Ölüm Dairesi, ölüleri öbür tarafa geçiren kadim bir devlet dairesidir. Binlerce yıldır kâğıt üstünde işler: her ölümün bir dosyası, her ruhun mühürlü bir formu vardır ve <b>mühürsüz ruh öbür tarafa geçemez</b>.</p>
-  <p>Dairenin tek saha görevlisi Azrail, 4000 yıl boyunca her ölümü kendisi yaptı. Bir gün masasına "Tükenmişlik İzni — Süresiz" yazan bir form bırakıp ortadan kayboldu. Ölümler gecikmeye, ruhlar ortada kalmaya, köylerde "ölemeyen" huysuz insanlar çoğalmaya başladı. Daire panikle staj ilanı verdi.</p>
-  <p>Siz, öbür tarafa geçiş formunu eksiksiz dolduran tek ruhsunuz. Bu yüzden işe alındınız. Dosya numaranız 2.847.113; patronunuz size kısaca "Yüzonüç" diyor.</p>
-  <div class="shots">
-    <figure><img src="img/30_intro_01.webp" alt="Açılış videosu: gece, mum ışığında kağıt yığınlarıyla dolu Azrail'in boş ofisi" loading="lazy"><figcaption>Açılış videosu: Azrail'in boş kalan masası.</figcaption></figure>
-    <figure><img src="img/30_intro_05.webp" alt="Açılış videosu: Nermin Hanım küçük mavi ruha form uzatıyor" loading="lazy"><figcaption>Nermin Hanım yeni stajyerin formunu inceliyor.</figcaption></figure>
-  </div>
-  <h3>Dosya 0001</h3>
-  <p>Arşivin en eski dosyası. Dünyada ölmesi planlanan ilk kişinin dosyasıdır ve 4000 yıldır üstünde "gecikmiş" damgası taşır. Kimse açmaya cesaret edemez. Oyun boyunca her bölgede bu dosyanın ipuçlarını toplarsınız.</p>
-  <details class="spoil">
-    <summary>Büyük spoiler: Dosya 0001'in sırrı <em>Hikâyenin ana sürprizini açar</em></summary>
-    <div>
-      <p>Dosya 0001, Azrail'in kendi dosyasıdır. Dünyanın ilk ölümü planlandığında sıradaki isim Ekrem adında bir çobandı. O gün ruhları götürecek kimse yoktu; Ekrem ölmek yerine ilk ruhu kendisi götürdü ve Azrail oldu. Kendi dosyası hiç kapanmadı.</p>
-      <p>4000 yıl sonra hiç yaşamadığı "hayatın ortasını" merak edip insan kılığına girdi. Her bölgede gördüğünüz, hiç yaşlanmayan <b>Ebedi Ekrem</b> odur: köyde bakkal, şehirde saatçi, savaşta sıhhiyeci, okyanusta fener bekçisi, antik krallıkta kâhin.</p>
-    </div>
-  </details>
-  <details class="spoil">
-    <summary>Büyük spoiler: Final ve sonlar <em>Son bölgenin sonunu anlatır</em></summary>
-    <div>
-      <p>Ölmeyenlerin Diyarı'nın 5. ayında patron ruh olarak Dosya 0001 çıkar: dev, yorgun, uykulu bir yaşlı adam ruhu. Masaya geldiğinde size tek bir seçim sunulur.</p>
-      <ul>
-        <li><b>Mühürle:</b> Dosya kapanır. Azrail 4000 yıl sonra ilk kez dinlenir ve stajyer yeni Azrail olur. Bay Kuzgun ağlar ama "Bu gözyaşı yönetmeliğe aykırı" der.</li>
-        <li><b>Formu yırt:</b> Stajyer dosyayı yırtar ve Ekrem'e bir hayat verir. Ekrem tacını bırakıp köyde bakkal açar. Stajyer yine Azrail olur, ama artık "gecikmiş" damgası taşıyan tek dosya ona aittir.</li>
-      </ul>
-      <p><b>Gizli son:</b> 18 ipucunun hepsini topladıysanız, seçtiğiniz sonun ardından o sona ait gizli bir sahne açılır. Ekrem ile Bay Kuzgun köy bakkalında çay içer ve Ekrem, stajyerin kusursuz geçiş formunu masaya koyar. El yazısı onunkidir. "İyi seçmişim," der.</p>
-    </div>
-  </details>
-</section>
-
-<section id="bolum0">
-  <h2><span class="no">03 · MADDE</span>Bölüm 0: İlk Mesai <span class="new">YENİ</span></h2>
-  <p>Yeni oyun, oyunun rehberi olan kısa bir önsözle başlar. <b>Bölüm 0: İlk Mesai</b>, Bay Kuzgun'un adım adım yönettiği bir oryantasyondur. İlk oyunda atlanamaz; sonraki yeni oyunlarda tekrar oynamak ya da geçmek size sorulur.</p>
-  <h3>Açılış: veda partisi</h3>
-  <p>Ölüm Dairesi'nde 4000 yıl boyunca tek bir izin günü olmamıştır ve o akşam Azrail için bir veda partisi verilir. Pastaya 4000 mum sığmaz ("Bir tane koyduk, temsilen"), hediye pilsiz bir altın saattir ("Zaten artık vaktin bol"). Azrail tükenmişlik iznine çıkar ve kimse onu bir daha görmez. Geriye boş bir masa, sönmüş bir pasta ve tek bir form kalır. Nermin Hanım kuyruktaki ruhlara bakar, siz bir adım öne çıkarsınız ("Ben mi?") ve işe alınırsınız.</p>
-  <div class="shots">
-    <figure><img src="img/81_ep0_party.webp" alt="Bölüm 0 ara sahnesi: tek mumlu pasta ve kağıt yığınları" loading="lazy"><figcaption>"4000 mum sığmadı canım. Bir tane koyduk, temsilen."</figcaption></figure>
-    <figure><img src="img/81_ep0_hire.webp" alt="Bölüm 0 ara sahnesi: Nermin Hanım, stajyer ve kuyruktaki ruhlar" loading="lazy"><figcaption>"Bir gönüllü! Ne cesaret. Tebrikler canım, işe alındın."</figcaption></figure>
-  </div>
-  <h3>Oryantasyon: 44 adım</h3>
-  <p>Bay Kuzgun ekranı karartır, dokunmanız gereken yeri bir ışık halkası ve parmakla gösterir. Sırasıyla şunları öğrenirsiniz:</p>
-  <ol>
-    <li>Mühür masasında ilk ölüm belgesini mühürlemek.</li>
-    <li>Sokağa inip çan çalınca hazır kişiyi biçmek, kaçan ruhu ağla yakalamak, çuvalı ofise taşımak.</li>
-    <li>Mühür'ü harcamak (masa geliştirmesi) ve hediye edilen ilk Nişan ile Ruh Ağacı'ndan kalıcı bir düğüm almak.</li>
-    <li>Kuleyi gezmek, Kabul'de ruhları doğru şeride sokmak ve zile basmak.</li>
-    <li>İskelet Yatakhanesi'ni açıp ilk İskelet Kâtip'i işe almak.</li>
-    <li>Kaldırımdaki eşyayı toplamak, kuzgun postasını açmak, Ekrem'in dükkânında satıp çay almak.</li>
-    <li>Rögardan lağıma inip bir fare ruhu yakalamak.</li>
-    <li>Kotayı, ayın süresini ve ay sonu raporunu tanımak.</li>
-  </ol>
-  <p class="muted"><i>"Özetle: Mühür bu dönemin harçlığı, Nişan kalıcı sicil. İkisini karıştıranı ben karıştırırım."</i> — Bay Kuzgun</p>
-  <h3>Kapanış</h3>
-  <p>Oryantasyon bitince Bay Kuzgun size bir <b>Oryantasyon Sertifikası</b> verir ("Çerçeveletme, duvar bütçemiz yok") ve oryantasyon dosyasını yırtar. Oyun sıfırlanır ve gerçek mesai 1. aydan başlar. Kazandığınız Nişan ve <b>Oryantasyon Sertifikası</b> başarımı sizde kalır. Son karede biri pencereyi açar ("Kim açtı o pencereyi?!") ve ekrana tek bir dosya düşer: Dosya 0001.</p>
-  <div class="shots">
-    <figure><img src="img/80_ep0_reap.webp" alt="Oryantasyon: Bay Kuzgun panelinde talimat, köylü kırmızı çerçeveyle işaretli" loading="lazy"><figcaption>"Çan çaldı, kum saati doldu: vakti gelen bu."</figcaption></figure>
-    <figure><img src="img/81_ep0_cert.webp" alt="Oryantasyon Sertifikası ve yırtılan oryantasyon dosyası" loading="lazy"><figcaption>"Bu oryantasyon dosyası da artık gereksiz."</figcaption></figure>
-  </div>
-</section>
-
-<section id="karakterler">
-  <h2><span class="no">04 · MADDE</span>Karakterler</h2>
-  <div class="cast">
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_stajyer.png" alt="Stajyerin portresi: mor kapüşonlu kafatası"></div><div><h4>Stajyer</h4><span class="alias">"YÜZONÜÇ" · DOSYA NO. 2.847.113</span><p>Yeni ölmüş sıradan bir memur. Kocaman kafatası, küçük gövdesi ve Azrail'den kalan paslı dev tırpanıyla dairenin yeni saha görevlisi. Konuşmaz, yüz ifadeleriyle tepki verir. Beceriksiz ama azimli.</p><div class="role">Oyuncu karakteri</div></div></article>
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_kuzgun.png" alt="Bay Kuzgun'un portresi: kravatlı iskelet kuzgun"></div><div><h4>Bay Kuzgun</h4><span class="alias">EN: MR. CORVIN · MÜDÜR VEKİLİ</span><p>Kravatlı iskelet kuzgun. Kota takıntılı, huysuz ve iğneleyici; her lafını bir yönetmelik maddesine bağlar. Gizlice Azrail'i özler.</p><div class="role">Patronunuz: kota, ay sonu raporu, terfi, Bölüm 0 rehberi</div></div></article>
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_nermin.png" alt="Nermin Hanım'ın portresi: gözlüklü, topuzlu hayalet"></div><div><h4>Nermin Hanım</h4><span class="alias">İNSAN KAYNAKLARI</span><p>İnsan Kaynakları hayaleti. Aşırı nazik, aşırı bürokrat, her şeye form ister. Gülümsemesi biraz ürkütücü. Herkese "canım" der.</p><div class="role">İşe alım, öğretici, reenkarnasyon</div></div></article>
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_kamil.png" alt="Kemikçi Kâmil'in portresi: tek gözlüklü iskelet"></div><div><h4>Kemikçi Kâmil</h4><span class="alias">ARŞİVCİ</span><p>Dedikoducu, koleksiyoncu ve komplo teorisyeni bir iskelet. Kayıp eşyaları ve Son Sözler kartlarını sizden çok sever.</p><div class="role">Arşiv, Son Sözler albümü, ipucu panosu</div></div></article>
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_ekrem.png" alt="Ebedi Ekrem'in portresi: elinde çay bardağıyla yaşlı adam"></div><div><h4>Ebedi Ekrem</h4><span class="alias">HİÇ YAŞLANMAYAN ADAM</span><p>Her bölgede başka kılıkta karşınıza çıkan, sakin, yorgun ve nazik bir adam. Köyde bakkal dükkânı işletir. <i>"Acele etme. Burada zaman bekler."</i></p><div class="role">Bakkal, Akçe alışverişi, Dosya 0001 ipuçları</div></div></article>
-    <article class="who-card"><div class="pic"><img class="px" src="img/sprite/p_muhasebeci.png" alt="Muhasebecinin portresi: yeşil siperlikli iskelet"></div><div><h4>İskelet Muhasebeci</h4><span class="alias">MUHASEBE KATI</span><p>Yeşil siperlikli, abaküs başından kalkmayan iskelet. Her kuruşun hesabını sorar; faizi de o verir.</p><div class="role">Muhasebe katı, abaküs mini oyunu</div></div></article>
-  </div>
-
-  <h3>Stajyerin rütbe görünümleri <span class="new">YENİ</span></h3>
-  <p>Stajyer baştan çizildi ve artık dört animasyonu var: bekleme, yürüme, tırpan savurma ve ağ atma. Her terfide cübbenin rengi değişir ve yeni bir rütbe işareti eklenir. Bu görünüm sokakta, mühür masasında, ara sahnelerde ve portrede aynıdır.</p>
-  <ul class="lineup">
-    <li><img class="px" src="img/sprite/rank_1.png" alt="Stajyer: mor cübbe"><b>Stajyer</b><span>Mor cübbe</span></li>
-    <li><img class="px" src="img/sprite/rank_2.png" alt="Memur: lacivert cübbe ve gözlük"><b>Memur</b><span>Lacivert cübbe, gözlük</span></li>
-    <li><img class="px" src="img/sprite/rank_3.png" alt="Şef: yeşil cübbe"><b>Şef</b><span>Yeşil cübbe, rütbe şeridi</span></li>
-    <li><img class="px" src="img/sprite/rank_4.png" alt="Kıdemli Şef: bordo cübbe"><b>Kıdemli Şef</b><span>Bordo cübbe, yaka nişanı</span></li>
-    <li><img class="px" src="img/sprite/rank_5.png" alt="Müdür: siyah cübbe ve monokl"><b>Müdür</b><span>Siyah cübbe, monokl</span></li>
-    <li><img class="px" src="img/sprite/rank_6.png" alt="Azrail Vekili: siyah cübbe, taç ve parlayan tırpan"><b>Azrail Vekili</b><span>Yarım taç, parlayan tırpan</span></li>
-  </ul>
-  <figure><img class="px" src="img/sprite/intern_poses.png" alt="Stajyerin animasyon kareleri: bekleme, yürüme, biçme ve ağ atma" loading="lazy" style="max-width:620px"><figcaption>Bekleme, yürüme, biçme ve ağ atma.</figcaption></figure>
-
-  <h3>İskelet personel</h3>
-  <ul class="lineup">
-    <li><img class="px" src="img/sprite/st_clerk.png" alt="İskelet Kâtip masada"><b>İskelet Kâtip</b><span>Siz yokken mühür basar</span></li>
-    <li><img class="px" src="img/sprite/st_carrier.png" alt="İskelet Taşıyıcı çuvalla"><b>İskelet Taşıyıcı</b><span>Çuvalı kuyruğa taşır</span></li>
-    <li><img class="px" src="img/sprite/st_reaper.png" alt="İskelet Biçici"><b>İskelet Biçici</b><span>Sokakta hazır kişileri biçer</span></li>
-    <li><img class="px" src="img/sprite/st_hound.png" alt="Hayalet Tazı"><b>Hayalet Tazı</b><span>Kaçan ruhları kovalar</span></li>
-  </ul>
-
-  <details class="spoil">
-    <summary>Spoiler: Ekrem'in bölge kılıkları <em>Ekrem'i her bölgede nerede bulacağınızı gösterir</em></summary>
-    <div>
-      <ul class="lineup">
-        <li><img class="px" src="img/sprite/ekrem_village.png" alt="Ekrem bakkal kılığında"><b>Gotik Köy</b><span>Bakkal</span></li>
-        <li><img class="px" src="img/sprite/ekrem_city.png" alt="Ekrem saatçi kılığında"><b>Sisli Şehir</b><span>Saatçi</span></li>
-        <li><img class="px" src="img/sprite/ekrem_savas.png" alt="Ekrem sıhhiyeci kılığında"><b>Savaş Alanı</b><span>Sıhhiyeci</span></li>
-        <li><img class="px" src="img/sprite/ekrem_okyanus.png" alt="Ekrem fener bekçisi kılığında"><b>Fırtınalı Okyanus</b><span>Fener bekçisi</span></li>
-        <li><img class="px" src="img/sprite/ekrem_antik.png" alt="Ekrem kâhin kılığında"><b>Antik Krallık</b><span>Kâhin</span></li>
-      </ul>
-    </div>
-  </details>
-  <figure><img src="img/31_cs_reincarnation.webp" alt="Reenkarnasyon ara sahnesi: Nermin Hanım elinde formla stajyerin yanında duruyor" loading="lazy"><figcaption>Nermin Hanım: "Reenkarnasyon formun hazır canım. İmzalaman gerekmiyor, zaten imzaladın."</figcaption></figure>
-</section>
-
-<section id="nasil">
-  <h2><span class="no">05 · MADDE</span>Nasıl oynanır</h2>
-  <ol class="loop">
-    <li><b>Biç</b><span>Çan çalınca kum saati kırmızı yanan kişiye dokun.</span></li>
-    <li><b>Yakala</b><span>Kaçan ruha dokun, çuvala at.</span></li>
-    <li><b>Mühürle</b><span>Kulede formu tam zamanında mühürle.</span></li>
-    <li><b>Geliş</b><span>Mühürle geliştirme ve kat al, dünyaya dön.</span></li>
-  </ol>
-
-  <h3>Dünya: biçmek ve yakalamak</h3>
-  <p>Sokak yatay kayar ve yaklaşık üç ekran genişliğindedir. Parmağınızı sürükleyerek kamerayı kaydırırsınız; üstteki mini harita hazır kişileri kırmızı noktayla gösterir. Herkesin başında bir kum saati vardır.</p>
-  <ul>
-    <li><b>Hazır kişi:</b> Kum saati dolunca belirgin bir <b>ölüm çanı</b> çalar, saat kırmızı yanar ve sallanır. Ona dokunursanız stajyer koşup tırpanı savurur. Hazır olmayan birine dokunmak bir şey yapmaz; kişi sadece "Ne var?" der.</li>
-    <li><b>Gecikme:</b> Hazır penceresi (başta 6 saniye) kaçarsa kişi bayılır, <b>ayın kotası 1 düşer</b> ve kişi bir gün sonra yeniden kum saatiyle gelir.</li>
-    <li><b>Ruh kaçışı:</b> Biçilen kişinin ruhu yarım saniye sonra en yakın ekran kenarına kaçar. Dokunup ağla yakalarsanız çuvala uçar. Kenara ulaşan ruh kaybolur.</li>
-    <li><b>Çuval:</b> Başta 5 ruh alır. Çuval doluyken çıkan ruhlar yakalanamaz ve kaçar.</li>
-    <li><b>Kısayollar:</b> Sağ altta kırmızı <span class="term">Ofis</span> düğmesi ve hemen solunda <span class="term">Kabul</span> düğmesi her an açıktır.</li>
-  </ul>
-  <div class="shots">
-    <figure><img src="img/73_idle_region_1.webp" alt="Gotik köy sokağı: yeni stajyer, kum saatli köylüler ve sağ altta Kabul ve Ofis düğmeleri" loading="lazy"><figcaption>Gotik Köy. Üst barda çuval, kota, ay, kalan süre ve Mühür; sağ altta Kabul ve Ofis.</figcaption></figure>
-    <figure><img src="img/02c_world_soul.webp" alt="Mavi bir ruh biçilen köylüden çıkıp kaçıyor" loading="lazy"><figcaption>"Ruh kaçıyor! Kaçan ruh kotadan sayılmaz."</figcaption></figure>
-  </div>
-
-  <h3>Ofis: mühürlemek</h3>
-  <p>Yakalanan ruhlar kuleye girince Kabul katında sıra numarası alır. Sırası gelen ruh mühür masasına oturur, bir laf eder ve önünüze <b>Ölüm Belgesi</b> gelir. Formun üstünde bir imleç sağa sola gider. Doğru anda dokunun:</p>
-  <div class="bar" aria-hidden="true"><div class="x" style="flex:20">lekeli</div><div class="g" style="flex:22.5">iyi</div><div class="p" style="flex:15">mükemmel</div><div class="g" style="flex:22.5">iyi</div><div class="x" style="flex:20">lekeli</div></div>
-  <div class="tbl"><table>
-    <thead><tr><th>Mühür</th><th>Bölge</th><th>Ödül</th><th>Kombo</th></tr></thead>
-    <tbody>
-      <tr><td><b style="color:var(--seal)">Mükemmel</b></td><td>Çubuğun %15'i, ortadaki kırmızı alan</td><td class="n">×2 Mühür</td><td>+1</td></tr>
-      <tr><td><b>İyi</b></td><td>Çubuğun %45'i</td><td class="n">×1 Mühür</td><td>sıfırlanır</td></tr>
-      <tr><td><b>Lekeli</b></td><td>Geri kalan her yer</td><td class="n">×0,5 Mühür</td><td>sıfırlanır</td></tr>
-    </tbody>
-  </table></div>
-  <p class="muted">Üçü de kotaya 1 ruh olarak sayılır. Lekeli mühür de mühürdür; sadece daha az para getirir.</p>
-  <figure><img src="img/74_intern_office.webp" alt="Ofis ekranı: stajyer masasında, arkada kuyruk tabelası ve dosya dolapları" loading="lazy"><figcaption>Mühür masası. Masanın arkasındaki rafta stajyerin rütbe işaretleri durur.</figcaption></figure>
-  <div class="note">Ofisteyken, Ruh Ağacı'nda ya da odalardayken dünyada yeni ölüm başlamaz. Zaten kırmızı yanan kişilerin süresi dörtte bir hızla azalır. Dünyaya dönünce bekleyen ölümler birer birer gelir. İskelet Biçici aldıysanız köy siz yokken de işlemeye devam eder.</div>
-
-  <h3>Ay, kota ve uyarı</h3>
-  <p>Bir ay gerçek zamanda <b>5 dakika</b> sürer. Ay başında Bay Kuzgun kotayı söyler; HUD'da <span class="term">mühürlenen / kota</span> olarak görünür. Ay bitince <b>Ay Sonu Raporu</b> açılır.</p>
-  <ul>
-    <li><b>Kota tuttuysa:</b> Kotayı aşan her ruh için prim alırsınız ve sonraki aya geçersiniz.</li>
-    <li><b>Kota tutmadıysa:</b> Bir <b>uyarı</b> alırsınız (raporda söndürülmüş bir mum). Uyarılar bölge boyunca birikir, terfide sıfırlanır.</li>
-    <li>Çuvalda ve kuyrukta kalan ruhlar sonraki aya devreder ama bu ayın kotasına sayılmaz.</li>
-  </ul>
-  <figure><img src="img/04_month_report.webp" alt="Ay Sonu Raporu: mühürlenen, gecikme, kaçan ruh sayıları ve KOTA TUTMADI damgası" loading="lazy"><figcaption>Ay Sonu Raporu. Bu sefer olmadı.</figcaption></figure>
-
-  <h3>Reenkarnasyon</h3>
-  <p>Üçüncü uyarıda stajyer <b>kurbağa olarak yeniden doğar</b> ve bölgenin başına dönersiniz. Mühür, oda geliştirmeleri ve uyarılar sıfırlanır. Kule katları, Nişanlar, Ruh Ağacı, kartlar, ipuçları, eşya koleksiyonu ve başarımlar kalır. Tekrar deneyen biraz daha güçlü başlasın diye her reenkarnasyon <b>Ruh Tecrübesi</b> verir (her biri Mühür +%5, en fazla 3).</p>
-
-  <h3>Terfi</h3>
-  <p>Her bölge 5 aydır. 5. ay <b>terfi ayı</b>dır: kotayı tutturmanın yanında bölgenin patron ruhunu da yakalayıp mühürlemeniz gerekir. İkisi birden olursa terfi edersiniz: yeni rütbe ve cübbe, yeni bölge, Nişan ve bir terfi ödülü. Terfiden önce elinizde kalan Mühür'ü kule katlarına harcayabilirsiniz, çünkü terfide Mühür ve oda geliştirmeleri sıfırlanır.</p>
-</section>
-
-<section id="ruhlar">
-  <h2><span class="no">06 · MADDE</span>Ruh tipleri</h2>
-  <p>Her bölgede farklı insanlar yaşar ve her biri farklı bir ruh bırakır. Değer çarpanı, o ruhun kaç Mühür ettiğini gösterir.</p>
-  <div class="tbl"><table>
-    <thead><tr><th></th><th>Ruh</th><th>Davranış</th><th>Değer</th></tr></thead>
-    <tbody>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_huysuz.png" alt=""></td><td>Huysuz</td><td>Düz çizgide yavaşça kaçar.</td><td class="n">×1</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_siska.png" alt=""></td><td>Sıska koşucu</td><td>Neredeyse iki kat hızlı ve zikzak çizerek kaçar.</td><td class="n">×1,2</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_zirhli.png" alt=""></td><td>Zırhlı şövalye</td><td>Yakalamak için iki dokunuş gerekir.</td><td class="n">×1,5</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_para.png" alt=""></td><td>Para çuvallı</td><td>Yakalanınca anında üç katı değerinde Mühür verir.</td><td class="n">×3</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_sis.png" alt=""></td><td>Sis ruhu</td><td>Sisin içinde görünmez. Ruh Kokusu ya da sis feneri gösterir.</td><td class="n">×1,3</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_bogulmus.png" alt=""></td><td>Boğulmuş</td><td>Her 1,5 saniyede bir suya dalar; dalarken dokunulamaz.</td><td class="n">×1,4</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_kedi.png" alt=""></td><td>Kedi</td><td>Ağdan bir kez kayıp yakında yeniden belirir; iki kez yakalanmalı.</td><td class="n">×2</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_ikiz.png" alt=""></td><td>İkizler</td><td>Çıkınca ikiye bölünür; ikisi ayrı ayrı yakalanır.</td><td class="n">×0,8 + ×0,8</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_mumya.png" alt=""></td><td>Mumya</td><td>Mühürlendikten sonra %25 ihtimalle kuyruğa geri yürür.</td><td class="n">×1,6</td></tr>
-      <tr><td class="sp"><img class="px" src="img/sprite/s_hayvan.png" alt=""></td><td>Hayvan ruhu</td><td>Yalnızca lağımda. Kotaya sayılmaz, biraz Mühür getirir.</td><td class="n">×0,35</td></tr>
-      <tr><td class="sp"></td><td>Patron ruh</td><td>Yavaş ama sekiz dokunuş ister ve her dört dokunuşta yer değiştirir.</td><td class="n">×20</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section id="bolgeler">
-  <h2><span class="no">07 · MADDE</span>Bölgeler ve rütbeler</h2>
-  <p>Oyun altı bölgeden oluşur. Her bölge bir rütbeye karşılık gelir ve kendine özgü bir mekanik getirir. Kotalar bölgeden bölgeye büyür. Ulaştığınız bölgeler arasında bölge seçimi ekranından geçebilirsiniz.</p>
-  <figure><img src="img/74_region_select.webp" alt="Bölge seçimi ekranı: altı bölgenin küçük resimleri" loading="lazy"><figcaption>Bölge seçimi ekranı.</figcaption></figure>
-  <div class="regions">
-    <article class="region">
-      <img src="img/73_idle_region_1.webp" alt="Gotik Köy" loading="lazy">
-      <div><span class="rk">BÖLGE 1 · STAJYER</span><h3>Gotik Köy</h3>
-        <p>Eğri çatılı evler, fırıncılar, nineler ve boğaya güvenen çiftçiler. Temel döngüyü burada öğrenirsiniz.</p>
-        <dl><dt>Mekanik</dt><dd>Öğretici, temel döngü</dd><dt>Patron</dt><dd>Dev Öfkeli Değirmenci</dd><dt>Yöre eşyaları</dt><dd>Örgü şişleri, pipo, tahta takunya</dd></dl></div>
-    </article>
-    <article class="region">
-      <img src="img/75_items_region_2.webp" alt="Sisli Şehir" loading="lazy">
-      <div><span class="rk">BÖLGE 2 · MEMUR</span><h3>Sisli Şehir</h3>
-        <p>Fabrika bacaları ve gaz lambaları. Sisin içinde bazı ruhlar görünmez olur.</p>
-        <dl><dt>Mekanik</dt><dd>Sis ruhları, İskelet Yatakhanesi açılır</dd><dt>Patron</dt><dd>Fabrika Patronu</dd><dt>Yöre eşyaları</dt><dd>Monokl, şemsiye, kulak borusu</dd></dl></div>
-    </article>
-    <article class="region">
-      <img src="img/73_idle_region_3.webp" alt="Savaş Alanı" loading="lazy">
-      <div><span class="rk">BÖLGE 3 · ŞEF</span><h3>Savaş Alanı</h3>
-        <p>Yıkık kiliseler, siperler ve dikenli teller. Ölümler borazan sesiyle, dalgalar halinde gelir.</p>
-        <dl><dt>Mekanik</dt><dd>Ölüm dalgaları: üç kişi birden hazır olur, ama pencere 2 saniye daha uzun</dd><dt>Patron</dt><dd>Ölmeyi Reddeden General</dd><dt>Yöre eşyaları</dt><dd>Madalya, tahta bacak, zar</dd></dl></div>
-    </article>
-    <article class="region">
-      <img src="img/42_region_4.webp" alt="Fırtınalı Okyanus" loading="lazy">
-      <div><span class="rk">BÖLGE 4 · KIDEMLİ ŞEF</span><h3>Fırtınalı Okyanus</h3>
-        <p>Batık direkler ve sallanan güverteler. Boğulmuş ruhlar suya dalar.</p>
-        <dl><dt>Mekanik</dt><dd>Gelgit: her 20 saniyede bir dalga güverteyi yalar, insanları ve ruhları sürükler. 2,5 saniye önceden uyarı sesi gelir.</dd><dt>Patron</dt><dd>Batık Geminin Kaptanı</dd><dt>Yöre eşyaları</dt><dd>Şişedeki mektup, pusula, lastik ördek</dd></dl></div>
-    </article>
-    <article class="region">
-      <img src="img/42_region_5.webp" alt="Antik Krallık" loading="lazy">
-      <div><span class="rk">BÖLGE 5 · MÜDÜR</span><h3>Antik Krallık</h3>
-        <p>Çöl, kerpiç evler ve piramitler. Ölüler pek de ölü kalmaz.</p>
-        <dl><dt>Mekanik</dt><dd>Mumyalar: biçilen kişi %25 ihtimalle mumya olarak kalkar. Kaçırırsanız ceza yok, bonus ruhtur.</dd><dt>Patron</dt><dd>Firavun (yakalanınca ikiye bölünür)</dd><dt>Yöre eşyaları</dt><dd>Altın bok böceği, mumya sargısı, çatlak taç</dd></dl></div>
-    </article>
-    <article class="region">
-      <img src="img/42_region_6.webp" alt="Ölmeyenlerin Diyarı" loading="lazy">
-      <div><span class="rk">BÖLGE 6 · AZRAİL VEKİLİ</span><h3>Ölmeyenlerin Diyarı</h3>
-        <p>Soluk, sisli ve sessiz bir yer. Burada zaman bile kararsız.</p>
-        <dl><dt>Mekanik</dt><dd>Geri akan kum: hazır bir kum saati aniden geri akabilir; kişi 7 saniye sonra yeniden hazır olur.</dd><dt>Patron</dt><dd><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun">Dosya 0001</span></dd><dt>Yöre eşyaları</dt><dd>Kırık kum saati, vasiyetname, alyans</dd></dl></div>
-    </article>
-  </div>
-</section>
-
-<section id="patronlar">
-  <h2><span class="no">08 · MADDE</span>Patron ruhlar</h2>
-  <p>Her bölgenin 5. ayında, ayın ortasında sokağın ortasındaki patron mekânında dev bir ruh belirir. 20 saniye ekranda kalır; kaçarsa bir dakika sonra yeniden gelir. Ay biter ve patron yakalanmamışsa ay "tutmadı" sayılır ve 5. ay tekrar oynanır.</p>
-  <ul class="lineup">
-    <li><img class="px" src="img/sprite/p_degirmenci.png" alt="Dev Öfkeli Değirmenci"><b>Dev Öfkeli Değirmenci</b><span>Gotik Köy · değirmen</span></li>
-    <li><img class="px" src="img/sprite/p_patron.png" alt="Fabrika Patronu"><b>Fabrika Patronu</b><span>Sisli Şehir · fabrika</span></li>
-    <li><img class="px" src="img/sprite/p_general.png" alt="Ölmeyi Reddeden General"><b>Ölmeyi Reddeden General</b><span>Savaş Alanı · siperli tepe</span></li>
-    <li><img class="px" src="img/sprite/p_kaptan.png" alt="Batık Geminin Kaptanı"><b>Batık Geminin Kaptanı</b><span>Okyanus · batık gemi</span></li>
-    <li><img class="px" src="img/sprite/p_firavun.png" alt="Firavun"><b>Firavun</b><span>Antik Krallık · piramit</span></li>
-  </ul>
-  <div class="tbl"><table>
-    <thead><tr><th>Patron</th><th>Son sözü</th></tr></thead>
-    <tbody>
-      <tr><td>Dev Öfkeli Değirmenci</td><td><i>"Kimse beni bir yere götüremez! Unum yarım kaldı!"</i></td></tr>
-      <tr><td>Fabrika Patronu</td><td class="muted">Para çuvallı dev bir ruh</td></tr>
-      <tr><td>Ölmeyi Reddeden General</td><td><i>"Geri çekilmek yok! Ölmek de yok! İkisi aynı emir!"</i></td></tr>
-      <tr><td>Batık Geminin Kaptanı</td><td><i>"Kaptan gemisini terk etmez! Gemi beni terk etti, ama bu teknik bir ayrıntı!"</i></td></tr>
-      <tr><td>Firavun</td><td><i>"Ben bir tanrıyım! Tanrılar ölmez! Bunu fermanla belgeledim!"</i></td></tr>
-      <tr><td><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun">Dosya 0001</span></td><td><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun"><i>"Uzun uyudum. Ama sanırım beni almaya gelen biri var."</i></span></td></tr>
-    </tbody>
-  </table></div>
-  <p><b>Firavun</b> bir kez yakalanınca iki küçük ikize bölünür; her ikiz 4 dokunuş ister ve patron ancak ikisi de yakalanınca çuvala girer. İkizlerden biri kaçarsa öbürü de gider.</p>
-  <div class="shots">
-    <figure><img src="img/45_boss_set_1.webp" alt="Dev Öfkeli Değirmenci ruhu değirmenin önünde" loading="lazy"><figcaption>Dev Öfkeli Değirmenci, değirmenin önünde.</figcaption></figure>
-    <figure><img src="img/45_boss_set_5.webp" alt="Firavun ruhu piramit girişinde" loading="lazy"><figcaption>Firavun, piramit girişinde.</figcaption></figure>
-  </div>
-</section>
-
-<section id="kule">
-  <h2><span class="no">09 · MADDE</span>Kule ve odalar</h2>
-  <p>Ölüm Dairesi boşlukta süzülen eğri bir kulede çalışır. Kuleyi kat kat Mühür ile satın alıp büyütürsünüz ve <b>katlar kalıcıdır</b>; terfide ya da reenkarnasyonda kaybolmaz. Her kat girilebilen bir odadır: dokunulabilir eşyaları, küçük bir bonus mini oyunu ve o odada işleyen geliştirmeleri satan bir panosu vardır. Odadayken dünyada zaman durur.</p>
-  <figure><img src="img/06_tower.webp" alt="Kule kesit görünümü: katlar ve sağda İskelet Yatakhanesi kat açma penceresi" loading="lazy"><figcaption>Kule kesiti. Kilitli katlar fiyat etiketiyle bekler.</figcaption></figure>
-  <div class="rooms">
-    <div class="room"><img src="img/70_kabul_sort.webp" alt="Kabul odası: renkli şeritler ve doğru sıra uyarısı" loading="lazy"><div class="b"><h4>Kabul</h4><span class="tag">Baştan açık · Mini oyun: Sıraya Sok</span><p>Ruhların numara aldığı bekleme salonu. Bir ruha dokunun ya da onu sürükleyin, sonra aynı renkteki şeride bırakın (Huysuz, Sıska, Zırhlı, Hayvan). Doğru şerit ekstra Mühür verir. Zile basınca çuvaldaki ruh "ding!" sesiyle kabul edilip masaya yollanır. Klavye ve oyun kumandasıyla da oynanır. Stajyerin dolabında Tırpan ve Ağ geliştirmeleri satılır.</p></div></div>
-    <div class="room"><img src="img/74_intern_office.webp" alt="Mühür Masası" loading="lazy"><div class="b"><h4>Mühür Masası</h4><span class="tag">Baştan açık · Ofis ekranının kendisi</span><p>Formların mühürlendiği masa. <span class="term">Masa</span> butonu mühür geliştirmelerini açar.</p></div></div>
-    <div class="room"><img src="img/20_room_arsiv.webp" alt="Arşiv odası" loading="lazy"><div class="b"><h4>Arşiv</h4><span class="tag">Mini oyun: Dosyala</span><p>Kemikçi Kâmil'in tozlu rafları. Mühürlediğiniz formlar burada birikir; her formu soyadının ilk harfine göre doğru çekmeceye (A–Ç, D–K, L–R, S–Z) atın. Doğru dosyalar Mühür ve arada bir Son Sözler kartı verir. Son Sözler albümü de buradadır.</p></div></div>
-    <div class="room"><img src="img/20_room_yatakhane.webp" alt="İskelet Yatakhanesi" loading="lazy"><div class="b"><h4>İskelet Yatakhanesi</h4><span class="tag">Mini oyun: Uyandırma</span><p>Mesai bitince iskeletlerin uyuduğu ranzalar. Çalan çalar saatlere zamanında dokunun, uyanan iskeletler bir süre <b>Mesai Coşkusu</b> ile daha hızlı çalışır. Bütün Personel geliştirmeleri burada satılır.</p></div></div>
-    <div class="room"><img src="img/20_room_muhasebe.webp" alt="Muhasebe odası" loading="lazy"><div class="b"><h4>Muhasebe</h4><span class="tag">Mini oyun: Defteri Denkleştir · ayda bir</span><p>Abaküsler ve hiç kapanmayan bir hesap. Defterdeki sayıyı kum saati bitmeden abaküste kurun, elinizdeki Mühür'e faiz alın. Kat İndirimi ve Rüşvet burada.</p></div></div>
-    <div class="room"><img src="img/20_room_gizli_arsiv.webp" alt="Gizli Arşiv" loading="lazy"><div class="b"><h4>Gizli Arşiv</h4><span class="tag">Mini oyun: İpleri Bağla</span><p>Kasa kapısı, mumlar ve kırmızı ipli komplo panosu. Birbirine ait iki ipucu arasına ip gerin; her doğru çift kısa bir hikâye notu açar ve 1 Nişan verir, bütün pano +3 Nişan.</p></div></div>
-    <div class="room"><img src="img/20_room_balkon.webp" alt="Kuzgun'un Balkonu" loading="lazy"><div class="b"><h4>Kuzgun'un Balkonu</h4><span class="tag">Şef rütbesinde açılır</span><p>Bay Kuzgun bütün bölgeyi buradan izler. Teleskoptan bu ayın ilerlemesine bakabilir, bölge haritasını görebilirsiniz. Kuzgunu fazla dürtmeyin; sabrı da bir yere kadar.</p></div></div>
-  </div>
-</section>
-
-<section id="gelistirme">
-  <h2><span class="no">10 · MADDE</span>Geliştirmeler</h2>
-  <p>Oyunda iki para birimiyle iki tür geliştirme vardır.</p>
-  <div class="tbl"><table>
-    <thead><tr><th></th><th>Oda geliştirmeleri</th><th>Ruh Ağacı</th></tr></thead>
-    <tbody>
-      <tr><td>Para</td><td><b>Mühür</b> (her mühürlenen ruhtan)</td><td><b>Nişan</b> (terfi, ipucu, albüm, eşya setleri, nadir postalar)</td></tr>
-      <tr><td>Nerede</td><td>Kule odalarının panolarında</td><td>Kulenin çatısındaki ölü ağaç</td></tr>
-      <tr><td>Terfide</td><td>Sıfırlanır</td><td>Kalıcıdır</td></tr>
-      <tr><td>Sayı</td><td>4 dal × 9 düğüm</td><td>8 kök düğüm + 4 gövde hattı (26 düğüm)</td></tr>
-    </tbody>
-  </table></div>
-  <p>Panoda her satır etkinin "şimdi → sonraki" halini birimiyle gösterir; örneğin <span class="term">Tırpan süresi 0,40 sn → 0,35 sn</span>. Üst kademeler bölge ilerledikçe açılır (K3 ikinci bölgeden, K4 üçüncü bölgeden). Pahalı alımlarda onay penceresi çıkar.</p>
-
-  <h3>Biçme dalı · Kabul, "Tırpan" sekmesi</h3>
-  <div class="tbl"><table><thead><tr><th>Düğüm</th><th>Etki</th></tr></thead><tbody>
-    <tr><td>Keskin Tırpan</td><td>Savuruş süresi kısalır (0,40 sn'den 0,16 sn'ye kadar)</td></tr>
-    <tr><td>Koşar Adım</td><td>Stajyer daha hızlı koşar</td></tr>
-    <tr><td>Sabırlı Kum</td><td>Hazır penceresi uzar (6 sn'den 8,5 sn'ye kadar)</td></tr>
-    <tr><td>Uzun Sap</td><td>Biçme menzili artar, stajyer daha az yürür</td></tr>
-    <tr><td>Önsezi</td><td>Kum saati hazır olmadan 1,5 sn önce sarı yanıp söner</td></tr>
-    <tr><td>Geniş Savuruş</td><td>Tek savuruş yakındaki 1–3 hazır kişiyi daha biçer</td></tr>
-    <tr><td>Uysal Ruhlar</td><td>Bazı ruhlar kaçmadan doğrudan çuvala girer</td></tr>
-    <tr><td>Kum Saati Çevir</td><td>Yetenek (aşağıya bakın)</td></tr>
-    <tr><td>Ölüm Defteri</td><td>Yetenek (aşağıya bakın)</td></tr>
-  </tbody></table></div>
-
-  <h3>Yakalama dalı · Kabul, "Ağ" sekmesi</h3>
-  <div class="tbl"><table><thead><tr><th>Düğüm</th><th>Etki</th></tr></thead><tbody>
-    <tr><td>Büyük Ağ</td><td>Ağın yakalama alanı büyür</td></tr>
-    <tr><td>Geniş Çuval</td><td>Çuval +2 (en fazla 15)</td></tr>
-    <tr><td>Ağır Ruhlar</td><td>Ruhlar daha yavaş kaçar</td></tr>
-    <tr><td>Ruh Mıknatısı</td><td>Ruhlar stajyere doğru çekilir</td></tr>
-    <tr><td>Ruh Vakumu</td><td>Yetenek (aşağıya bakın)</td></tr>
-    <tr><td>Geri Dönen Ruhlar</td><td>Kaçan ruh bazen ekranın öbür ucundan geri girer</td></tr>
-    <tr><td>Ruh Kokusu</td><td>Ruhlar mini haritada görünür, sis ruhları yarı görünür olur</td></tr>
-    <tr><td>Taşıyıcı Kuzgunlar</td><td>Çuval doluyken kuzgunlar ruhları kuyruğa taşır</td></tr>
-    <tr><td>Zırh Delici</td><td>Zırhlı, kedi ve patron ruhlarda her dokunuş 2 sayılır</td></tr>
-  </tbody></table></div>
-
-  <h3>Bürokrasi dalı · Mühür Masası, Kabul, Arşiv, Muhasebe</h3>
-  <div class="tbl"><table><thead><tr><th>Düğüm</th><th>Oda</th><th>Etki</th></tr></thead><tbody>
-    <tr><td>Mürekkep Kalitesi</td><td>Masa</td><td>Ruh başına Mühür +%15</td></tr>
-    <tr><td>Geniş Hedef</td><td>Masa</td><td>Mükemmel alan genişler (%15'ten %30'a kadar)</td></tr>
-    <tr><td>Hızlı Kuyruk</td><td>Kabul</td><td>Ruhlar masaya daha hızlı gelir, imleç turu kısalır</td></tr>
-    <tr><td>Kota Primi</td><td>Masa</td><td>Kota primi +%50</td></tr>
-    <tr><td>Toplu Mühür</td><td>Masa</td><td>Tek dokunuşla 2–4 form mühürlenir</td></tr>
-    <tr><td>Kombo Mühür</td><td>Masa</td><td>Art arda mükemmellerde artan çarpan</td></tr>
-    <tr><td>Kat İndirimi</td><td>Muhasebe</td><td>Kule katları %10 ucuzlar</td></tr>
-    <tr><td>Rapor Makyajı</td><td>Arşiv</td><td>Kotanın küçük bir eksiği "tuttu" sayılır (primsiz)</td></tr>
-    <tr><td>Rüşvet</td><td>Muhasebe</td><td>Ayda bir, Mühür karşılığında bir uyarı silinir</td></tr>
-  </tbody></table></div>
-
-  <h3>Personel dalı · İskelet Yatakhanesi</h3>
-  <p>İskelet ordunuz. Bu dal için Yatakhane katını açmış olmanız gerekir.</p>
-  <div class="tbl"><table><thead><tr><th>Düğüm</th><th>Etki</th></tr></thead><tbody>
-    <tr><td>İskelet Kâtip</td><td>Ofiste kendiliğinden "iyi" mühür basar</td></tr>
-    <tr><td>İskelet Taşıyıcı</td><td>Çuvaldaki ruhları kuyruğa taşır</td></tr>
-    <tr><td>İskelet Biçici</td><td>Dünyada stajyerin yanında yürür, hazır kişileri biçer. Siz ofisteyken de çalışır.</td></tr>
-    <tr><td>Hayalet Tazı</td><td>Kaçan ruhları kovalayıp yakalar</td></tr>
-    <tr><td>Fazla Mesai</td><td>Bütün iskeletler +%15 hızlı</td></tr>
-    <tr><td>Sendika</td><td>Kâtip mühürlerinin bir kısmı mükemmel olur</td></tr>
-    <tr><td>Kuzgun Sürüsü</td><td>Yetenek (aşağıya bakın)</td></tr>
-    <tr><td>Vardiya</td><td>İkinci kâtip ve ikinci biçici</td></tr>
-    <tr><td>Yönetim Kurulu</td><td>Bütün personel etkileri +%25</td></tr>
-  </tbody></table></div>
-  <figure><img src="img/08_world_staff.webp" alt="Dünyada stajyerin yanında iskelet biçici ve hayalet tazı" loading="lazy"><figcaption>İskelet Biçici ve Hayalet Tazı iş başında.</figcaption></figure>
-
-  <h3>Ruh Ağacı · kalıcı güçler</h3>
-  <p>Ofiste yukarı kaydırınca kulenin çatısındaki dev, ölü ağaç açılır. Buradaki düğümler Nişan ile alınır ve oyun boyunca hiç sıfırlanmaz.</p>
-  <figure><img src="img/05_soul_tree.webp" alt="Ruh Ağacı: dallarında fenerler asılı ölü ağaç" loading="lazy"><figcaption>Ruh Ağacı.</figcaption></figure>
-  <div class="tbl"><table><thead><tr><th>Kök düğüm</th><th>Etki</th></tr></thead><tbody>
-    <tr><td>Tecrübe</td><td>Bütün Mühür kazancı +%10 / seviye</td></tr>
-    <tr><td>Cep Harçlığı</td><td>Her bölgeye bir miktar Mühürle başlarsınız</td></tr>
-    <tr><td>Kıdem</td><td>Başlangıç çuvalı +1</td></tr>
-    <tr><td>Kuzgunun Gözdesi</td><td>Her bölgedeki ilk uyarı "sözlü ihtar" olur ve sayılmaz</td></tr>
-    <tr><td>Hatıralar</td><td>Son Sözler kartı bulma şansı artar</td></tr>
-    <tr><td>Hızlı Öğrenen</td><td>Oda geliştirmeleri ucuzlar</td></tr>
-    <tr><td>Eski Dost</td><td>Her bölgeye bir İskelet Kâtiple başlarsınız</td></tr>
-    <tr><td>Azrail'in İzi</td><td>İpucu taşıyan kişinin üstünde küçük bir parıltı yanar</td></tr>
-  </tbody></table></div>
-  <p>Köklerin üstünde dört gövde hattı yükselir: <b>Tırpan</b> (savuruş, pencere, menzil), <b>Mühür</b> (mükemmel alan, ruh değeri, prim, kombo), <b>Daire</b> (ağ, çuval, kat fiyatı, iskelet hızı) ve <b>Taç</b>. Taç hattı en pahalısıdır: bir uyarı mumu daha, patron ruhun daha az dokunuşla yakalanması ve her aya 15 saniye ek süre.</p>
-</section>
-
-<section id="yetenekler">
-  <h2><span class="no">11 · MADDE</span>Yetenekler</h2>
-  <p>Dört yetenek vardır ve alınan her biri alt bardaki kendi yuvasına yerleşir. Bekleme süresi yoktur: her yeteneğin halkası oynadıkça dolar, dolunca yanar, dokununca kullanılır ve boşalır. Kullanacak hedef yoksa yetenek harcanmaz.</p>
-  <div class="tbl"><table>
-    <thead><tr><th>Yetenek</th><th>Halka neyle dolar</th><th>Etki</th></tr></thead>
-    <tbody>
-      <tr><td><b>Kum Saati Çevir</b></td><td>4 mükemmel mühür</td><td>En acil hazır kişinin kum saati 10–14 saniye durur</td></tr>
-      <tr><td><b>Ruh Vakumu</b></td><td>8 biçme</td><td>Ekranda kaçan bütün ruhlar çuvala uçar</td></tr>
-      <tr><td><b>Kuzgun Sürüsü</b></td><td>3 sokak buluntusu</td><td>30 saniye boyunca ölümler 3 saniye önceden işaretlenir; stajyer 10 saniye %40 hızlı koşar</td></tr>
-      <tr><td><b>Ölüm Defteri</b></td><td>Kotaya mühürlenen 10 ruh</td><td>Deftere tek kaşe: en yakın 3 hazır kişi biçilir</td></tr>
-    </tbody>
-  </table></div>
-</section>
-
-<section id="sokak">
-  <h2><span class="no">12 · MADDE</span>Sokak, bakkal ve lağım</h2>
-  <h3>Ölüm beklerken</h3>
-  <p>Sokakta kimse hazır değilken de yapacak şey vardır:</p>
-  <ul>
-    <li><b>Kayıp ruhlar:</b> Yüzyıllardır yol arayan eski ruhlar ekrandan süzülür. Dokunun, birkaç Mühür verirler. <i>"1543'ten beri yol arıyorum. Teşekkürler evlat."</i></li>
-    <li><b>Kuzgun postası:</b> Bir kuzgun mektupla geçer. Zarfı düşürün: içinden bir kese Mühür, Bay Kuzgun'dan bir not ya da nadiren bir Nişan çıkar. <i>"Madde 31: Boş zaman yasaktır. Bu notu okumak da."</i></li>
-    <li><b>Kayıp eşyalar:</b> Kaldırımda altın gibi parıldayan eşyalar düşer. Dokunun, stajyer yürüyüp cebine atar.</li>
-    <li><b>Akçe:</b> Ölenler bazen bozuk para düşürür. 14 saniye içinde dokunup toplayın.</li>
-  </ul>
-
-  <h3>Kayıp eşya koleksiyonu <span class="new">YENİ</span></h3>
-  <p>Kaldırımda bulunabilecek <b>29 eşya türü</b> var: her yerde çıkan 11 ortak eşya ve her bölgeye özgü 3'er yöre eşyası. Her eşyanın kendi kara mizahlı notu vardır ve Ekrem'e Akçe karşılığında satılır. Koleksiyonu tamamlamak Nişan getirir:</p>
-  <ul>
-    <li>İlk sekiz klasik eşyanın hepsini bulmak: +1 Nişan.</li>
-    <li>Bir bölgenin üç yöre eşyasını bulmak: o bölge için +1 Nişan (altı bölgede ayrı ayrı).</li>
-    <li>29 türün hepsini bulmak: +1 Nişan ve <b>Eksiksiz</b> başarımı.</li>
-  </ul>
-  <figure><img class="px" src="img/75_items_sheet.webp" alt="29 kayıp eşyanın ikon tablosu" loading="lazy" style="max-width:640px"><figcaption>Bütün eşya türleri.</figcaption></figure>
-  <p class="achgrp">Ortak eşyalar (Akçe)</p>
-  <ul class="items">
-    <li>Kırık gözlük<span>3</span></li><li>Takma diş<span>4</span></li><li>Aşk mektubu<span>5</span></li><li>Para kesesi<span>8</span></li><li>Cep saati<span>9</span></li><li>Bez bebek<span>4</span></li><li>Nal<span>3</span></li><li>Paslı anahtar<span>6</span></li><li>Cep matarası<span>5</span></li><li>Ödenmemiş fatura<span>1</span></li><li>Piyango bileti<span>2</span></li>
-  </ul>
-  <p class="achgrp">Yöre eşyaları (Akçe)</p>
-  <ul class="items">
-    <li>Örgü şişleri · Köy<span>4</span></li><li>Pipo · Köy<span>5</span></li><li>Tahta takunya · Köy<span>3</span></li>
-    <li>Monokl · Şehir<span>7</span></li><li>Şemsiye · Şehir<span>4</span></li><li>Kulak borusu · Şehir<span>6</span></li>
-    <li>Madalya · Savaş<span>8</span></li><li>Tahta bacak · Savaş<span>4</span></li><li>Zar · Savaş<span>3</span></li>
-    <li>Şişedeki mektup · Okyanus<span>5</span></li><li>Pusula · Okyanus<span>7</span></li><li>Lastik ördek · Okyanus<span>3</span></li>
-    <li>Bok böceği · Antik<span>8</span></li><li>Mumya sargısı · Antik<span>2</span></li><li>Çatlak taç · Antik<span>9</span></li>
-    <li>Kırık kum saati · Ölmeyenler<span>6</span></li><li>Vasiyetname · Ölmeyenler<span>5</span></li><li>Alyans · Ölmeyenler<span>9</span></li>
-  </ul>
-  <div class="cards">
-    <div class="card"><span class="r">NOT</span><q>Piyango bileti. Kazanmış! Çekiliş cenazeden bir gün sonraymış.</q><div class="who">Ortak eşya</div></div>
-    <div class="card"><span class="r">NOT</span><q>Lastik ördek. Gemi battı. Ördek batmadı. Doğa adil değil.</q><div class="who">Fırtınalı Okyanus</div></div>
-    <div class="card"><span class="r">NOT</span><q>Şemsiye. Yağmurdan korumuş. Düşen kiremitten korumamış.</q><div class="who">Sisli Şehir</div></div>
-  </div>
-
-  <h3>Ekrem'in bakkalı</h3>
-  <p>Ebedi Ekrem'in dükkânında kayıp eşyaları <b>Akçe</b> karşılığında satar (Sat sekmesi sayfa sayfa gezilir), Akçe ile küçük yardımlar alırsınız. <i>"Acele etme. Burada zaman bekler."</i></p>
-  <div class="tbl"><table>
-    <thead><tr><th>Mal</th><th>Fiyat</th><th>Etki</th></tr></thead>
-    <tbody>
-      <tr><td>Mühür kesesi</td><td class="n">10 Akçe</td><td>Bir kese dolusu Mühür</td></tr>
-      <tr><td>Ek süre</td><td class="n">12 Akçe</td><td>Bu aya +20 saniye (ayda en fazla 2)</td></tr>
-      <tr><td>Demli çay</td><td class="n">6 Akçe</td><td>Stajyer 60 saniye hızlı koşar</td></tr>
-      <tr><td>Sis feneri</td><td class="n">8 Akçe</td><td>Sisli ruhlar 90 saniye görünür (Şehir'den itibaren)</td></tr>
-      <tr><td>Uğur muskası</td><td class="n">8 Akçe</td><td>Sonraki 5 ölü çift Akçe düşürür</td></tr>
-      <tr><td>Kum torbası</td><td class="n">5 Akçe</td><td>3 kez: kum saati 4 saniye daha bekler</td></tr>
-    </tbody>
-  </table></div>
-  <figure><img src="img/34_bakkal_buy.webp" alt="Bakkal ekranı: Ekrem tezgahın arkasında, sağda mal listesi" loading="lazy"><figcaption>Bakkal. Rafta ne varsa Akçe ile.</figcaption></figure>
-
-  <h3>Lağım</h3>
-  <p>Her bölgenin altında kendine özgü bir lağım vardır. Giriş, sokakta açık duran bir kapaktır: köyde ve şehirde rögar, savaşta siper kapağı, okyanusta güverte ambarı, antikte mezar kapağı. Aşağıda fareler ve başka hayvanlar kendi sıralarıyla ölür. <b>Hayvan ruhları kotaya sayılmaz ama Mühür getirir</b>, geciken hayvan da ceza yazdırmaz. Çıkmak için merdivene dokunun. <i>"Logarda kalan stajyeri fareler terfi ettirir."</i></p>
-  <figure><img src="img/14_sewer.webp" alt="Lağım: tuğla tüneller, su kanalı ve fareler" loading="lazy"><figcaption>Köyün lağımı.</figcaption></figure>
-</section>
-
-<section id="koleksiyon">
-  <h2><span class="no">13 · MADDE</span>Son Sözler ve Dosya 0001</h2>
-  <h3>Son Sözler kartları</h3>
-  <p>Her ölü, son sözünü bir kart olarak bırakır. Toplam <b>68 kart</b> var: köy için 16, diğer beş bölge için 10'ar ve her bölgede düşebilen 2 arşiv kartı. Nadirlikler: 36 sıradan, 16 nadir, 16 efsane.</p>
-  <ul>
-    <li>Sokakta her biçmede %8 ihtimalle bir kart düşer (Hatıralar ile artar).</li>
-    <li>Arşiv'deki Dosyala oyununda belli sayıda doğru dosyada bir kart çekilir.</li>
-    <li>Sahip olmadığınız kartlar öne çıkar; eski bölgelerin eksikleri sonraki bölgelerde de düşmeye devam eder.</li>
-    <li>Bir bölgenin albümünü tamamlamak kısa bir ara sahne açar ve ipucu getirir.</li>
-  </ul>
-  <div class="cards">
-    <div class="card"><span class="r">SIRADAN</span><q>Bu ekmeği bir dakika daha fırında tutsam ne olur ki?</q><div class="who">Fırıncı · Gotik Köy</div></div>
-    <div class="card"><span class="r">SIRADAN</span><q>Boğa bana dostça bakıyor bence.</q><div class="who">Çiftçi · Gotik Köy</div></div>
-    <div class="card"><span class="r">SIRADAN</span><q>Bu mantar kesin yenir.</q><div class="who">Sarhoş · Gotik Köy</div></div>
-    <div class="card"><span class="r">SIRADAN</span><q>Bastonum olmadan da yürürüm ben.</q><div class="who">Nine · Gotik Köy</div></div>
-    <div class="card"><span class="r">SIRADAN</span><q>Makineyi durdurmadan tamir ederim, iki saniye.</q><div class="who">İşçi · Sisli Şehir</div></div>
-    <div class="card"><span class="r">SIRADAN</span><q>Ölüm Dairesi'ne mektup mu? Elden teslim ederim, yolu biliyorum.</q><div class="who">Postacı · Arşiv kartı</div></div>
-  </div>
-
-  <h3>Dosya 0001 ipuçları</h3>
-  <p>Her bölgede 3 ipucu, toplam <b>18 ipucu</b> (9 çift) vardır. Bir ipucu bölgedeki gizemli bir karakterle karşılaşmadan, biri o bölgenin albümünden, biri de patron ruhun son sözünden gelir. Terfi ettikçe ve kart topladıkça Gizli Arşiv panosunda yeni ipuçları belirir; siz de ipleri bağlayarak çiftleri eşlersiniz.</p>
-  <figure><img src="img/20_room_gizli_arsiv.webp" alt="Gizli Arşiv panosu" loading="lazy"><figcaption>Gizli Arşiv'deki Dosya 0001 panosu.</figcaption></figure>
-  <details class="spoil">
-    <summary>Spoiler: bölge bölge ipuçları <em>Ekrem'in kılıklarını ve patronların sözlerini açar</em></summary>
-    <div><div class="tbl"><table>
-      <thead><tr><th>Bölge</th><th>Ekrem'in kılığı</th><th>Patronun ipucu</th></tr></thead>
-      <tbody>
-        <tr><td>Gotik Köy</td><td>Hiç yaşlanmayan bakkal (üstünde kum saati yok)</td><td>"Ekrem bana veresiye yazmıştı... 1300 yılında."</td></tr>
-        <tr><td>Sisli Şehir</td><td>Saatçi (dükkândaki bütün saatler geriye işliyor)</td><td>"Ortağım Ekrem hiç ölmedi, hissesi hâlâ duruyor!"</td></tr>
-        <tr><td>Savaş Alanı</td><td>Herkesi kurtarmaya çalışan sıhhiyeci</td><td>"O sıhhiyecinin gözleri... sizin patronunuzunkiler gibiydi."</td></tr>
-        <tr><td>Fırtınalı Okyanus</td><td>Fener bekçisi</td><td>"Bekçi bize yol gösterdi. Ama hep limana, hiç dibe değil."</td></tr>
-        <tr><td>Antik Krallık</td><td>Kâhin</td><td>"Mezarımı yapan mimar Ekrem'di. Kendi mezarını hiç yapmadı."</td></tr>
-      </tbody>
-    </table></div>
-    <ul class="lineup"><li><img class="px" src="img/sprite/p_dosya0001.png" alt="Dosya 0001 patron ruhunun portresi"><b>Dosya 0001</b><span>Ölmeyenlerin Diyarı'nın patronu</span></li></ul>
-    </div>
-  </details>
-</section>
-
-<section id="basarimlar">
-  <h2><span class="no">14 · MADDE</span>Onur Duvarı <span class="new">46 BAŞARIM</span></h2>
-  <p>Başarımlar ana menüdeki <b>Onur Duvarı</b>'nda durur ve Google Play Games ile Steam'e bağlıdır. Duvar artık üç sayfadır; oklarla ya da kumandayla sayfa çevrilir. Çerçeveler sırayla yerine düşer, mumlar titreşir, yeni açılan başarım parıldar ve ilerleme çubukları dolar (Az hareket ayarında hepsi durağandır). Toplam 46 başarım var, üçü gizli. Her başarım açıldığında bir miktar Mühür de verir.</p>
-  <div class="shots">
-    <figure><img src="img/85_ach_page1.webp" alt="Onur Duvarı birinci sayfa" loading="lazy"><figcaption>Onur Duvarı, 1. sayfa.</figcaption></figure>
-    <figure><img src="img/85_ach_page2.webp" alt="Onur Duvarı ikinci sayfa" loading="lazy"><figcaption>2. sayfa: Kayıp Eşya Bürosu ilerlemede.</figcaption></figure>
-  </div>
-
-  <p class="achgrp">Temel ve hikâye</p>
-  <ul class="ach">
-    <li><b>İlk Hasat</b><i>First Harvest</i><span>İlk ruhu biç.</span></li>
-    <li><b>Kelebek Avcısı</b><i>Butterfly Catcher</i><span>Kaçan 50 ruhu yakala.</span></li>
-    <li><b>Kırtasiye Faresi</b><i>Paper Pusher</i><span>500 form mühürle.</span></li>
-    <li><b>Tam Vaktinde</b><i>Right On Time</i><span>Bir ayı hiç gecikmeden bitir.</span></li>
-    <li><b>Patronun Gözdesi</b><i>Boss's Pet</i><span>Kotayı arka arkaya 5 ay aş.</span></li>
-    <li><b>Mükemmeliyetçi</b><i>Perfectionist</i><span>Arka arkaya 20 mükemmel mühür.</span></li>
-    <li><b>Mum Söndü</b><i>Candle Out</i><span>İlk uyarını al.</span></li>
-    <li><b>Yeniden Doğdum</b><i>Born Again</i><span>İlk reenkarnasyon.</span></li>
-    <li><b>Terfi!</b><i>Promoted!</i><span>Memur ol.</span></li>
-    <li><b>Denizci Ruh</b><i>Sea Soul</i><span>Okyanus bölgesini aç.</span></li>
-    <li><b>Firavunun Laneti</b><i>Pharaoh's Curse</i><span>Antik krallığı aç.</span></li>
-    <li><b>Koleksiyoncu</b><i>Collector</i><span>50 Son Sözler kartı topla.</span></li>
-    <li><b>Kule Ustası</b><i>Tower Master</i><span>Kulenin bütün katlarını aç.</span></li>
-    <li><b>Gizli başarım</b><i>Dokunup göster</i><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun">Dosya Kapandı: Dosya 0001'i çöz.</span></li>
-    <li><b>Yeni Azrail</b><i>The New Reaper</i><span>Azrail rütbesine ulaş.</span></li>
-    <li><b>Oryantasyon Sertifikası</b><i>Orientation Certificate</i><span>Bölüm 0: İlk Mesai'yi bitir.</span></li>
-  </ul>
-
-  <p class="achgrp">Sokak, bakkal ve lağım</p>
-  <ul class="ach">
-    <li><b>İlk Buluntu</b><i>Finders Keepers</i><span>Sokakta ilk kayıp eşyayı topla. Sahibi aramaz.</span></li>
-    <li><b>Kayıp Eşya Bürosu</b><i>Lost Property Office</i><span>Sokaktan 50 kayıp eşya topla.</span></li>
-    <li><b>Yöre Takımı</b><i>Local Set</i><span>Bir bölgenin üç yöresel eşyasını tamamla.</span></li>
-    <li><b>Eksiksiz</b><i>Nothing Missing</i><span>29 eşya türünün hepsini bul.</span></li>
-    <li><b>Logar Faresi</b><i>Sewer Rat</i><span>İlk kez bir rögardan logara in.</span></li>
-    <li><b>Hayvansever</b><i>Animal Lover</i><span>Logarda 25 hayvan ruhu yakala.</span></li>
-    <li><b>İlk Alışveriş</b><i>First Purchase</i><span>Ebedi Ekrem'den bir şey satın al. Fiş vermez.</span></li>
-    <li><b>İlk Satış</b><i>First Sale</i><span>Ekrem'e ilk eşyanı sat. Nereden bulduğunu sormaz.</span></li>
-    <li><b>Akçe Kesesi</b><i>Purse of Akçe</i><span>Toplam 500 Akçe kazan.</span></li>
-    <li><b>Gizli başarım</b><i>Dokunup göster</i><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun">Ölüm Ayırana Dek: Alyansı parmak kemiğiyle birlikte Ekrem'e sat.</span></li>
-    <li><b>Kuzgun Postası</b><i>Crow Mail</i><span>Kuzgunun getirdiği ilk mektubu aç.</span></li>
-    <li><b>Sadık Okur</b><i>Avid Reader</i><span>20 mektup aç. Hiçbiri sana yazılmamış.</span></li>
-    <li><b>Kayıp Ruhlar</b><i>Lost Souls</i><span>Yolunu kaybetmiş 10 ruha dokun.</span></li>
-  </ul>
-
-  <p class="achgrp">Kule ve personel</p>
-  <ul class="ach">
-    <li><b>Sıraya Sokan</b><i>Queue Keeper</i><span>Kabul'de 100 ruhu doğru sıraya sok.</span></li>
-    <li><b>İskelet Kadro</b><i>Skeleton Crew</i><span>Kâtip ile Biçici'yi ve Hayalet Tazı'yı işe al.</span></li>
-    <li><b>Dosyalama Ustası</b><i>Filing Master</i><span>Arşiv'de 100 form dosyala.</span></li>
-    <li><b>Defter Denk</b><i>Books Balanced</i><span>Muhasebe'de abaküsü 10 kez denkleştir.</span></li>
-    <li><b>İpleri Bağla</b><i>Connect the Strings</i><span>Gizli Arşiv'de ilk ipucu çiftini bağla.</span></li>
-    <li><b>Sabah Alarmı</b><i>Wake-Up Call</i><span>Yatakhane'de 50 iskeleti uyandır.</span></li>
-    <li><b>Gizli başarım</b><i>Dokunup göster</i><span class="blur" tabindex="0" role="button" aria-label="Spoiler, göstermek için dokun">Kuzgunun Sırrı: Balkonda Bay Kuzgun'u 25 kez dürt.</span></li>
-    <li><b>İlk Fidan</b><i>First Sapling</i><span>Ruh Ağacı'ndan ilk düğümünü al.</span></li>
-    <li><b>Kök Saldı</b><i>Deep Roots</i><span>Gövdedeki 26 düğümün hepsini aç.</span></li>
-  </ul>
-
-  <p class="achgrp">Ustalık ve uzun vade</p>
-  <ul class="ach">
-    <li><b>Kusursuz Mühür</b><i>Flawless Seal</i><span>1000 mükemmel mühür bas.</span></li>
-    <li><b>Mühür Makinesi</b><i>Stamping Machine</i><span>Arka arkaya 50 mükemmel mühür.</span></li>
-    <li><b>Sisli Şehir</b><i>Foggy City</i><span>Sisli Şehir'e terfi et.</span></li>
-    <li><b>Patron Mührü</b><i>Boss Stamp</i><span>İlk bölge patronunu mühürle.</span></li>
-    <li><b>Ebedi Mesai</b><i>Eternal Overtime</i><span>Ebedi Mesai'de kotayı 5 ay üst üste tut.</span></li>
-    <li><b>Albüm Tamam</b><i>Album Complete</i><span>Bir bölgenin Son Sözler albümünü tamamla.</span></li>
-    <li><b>Tam Koleksiyon</b><i>Full Collection</i><span>68 Son Sözler kartının hepsini topla.</span></li>
-    <li><b>Üçüncü Hayat</b><i>Third Life</i><span>Üç kez reenkarne ol. Kediler dokuz hak alıyor.</span></li>
-  </ul>
-</section>
-
-<section id="ebedi">
-  <h2><span class="no">15 · MADDE</span>Ebedi Mesai</h2>
-  <p>Hikâyeyi bitirdikten sonra oyun bitmez. <b>Ebedi Mesai</b>'de Ölmeyenlerin Diyarı'nda sınırsız ay oynarsınız. Kota her ay %10 büyür; patron ayı ve terfi yoktur. Tutan her ay serinizi 1 artırır, tutmayan ay sıfırlar ve en uzun seriniz rekor olarak saklanır. Uyarı ve reenkarnasyon kuralları sürer.</p>
-  <p class="muted"><i>"Ebedi Mesai, 1. ay. Ölüm bitmez, mesai de."</i> — Bay Kuzgun</p>
-</section>
-
-<section id="ayarlar">
-  <h2><span class="no">16 · MADDE</span>Ayarlar ve erişilebilirlik <span class="new">YENİ</span></h2>
-  <div class="tbl"><table>
-    <thead><tr><th>Ayar</th><th>Ne yapar</th></tr></thead>
-    <tbody>
-      <tr><td>Müzik, ses efektleri</td><td>Ses düzeyleri. Ölüm zamanı çanı çalarken müzik kısa bir an kısılır.</td></tr>
-      <tr><td>Titreşim</td><td>Telefonda biçme, yakalama, mühür ve büyük anlarda kısa titreşim. Açınca bir kez titrer.</td></tr>
-      <tr><td>Ekran sallanması</td><td>Ekran sarsıntısı efektlerini açar ya da kapatır.</td></tr>
-      <tr><td>Renk körlüğü</td><td>Renk ayrımını güçlendiren filtre.</td></tr>
-      <tr><td>Büyük yazı</td><td>Arayüz yazılarını büyütür.</td></tr>
-      <tr><td>Az hareket</td><td>Animasyonları sadeleştirir; Onur Duvarı durağan olur.</td></tr>
-      <tr><td>Yazı hızı</td><td>Diyalogların akma hızı.</td></tr>
-      <tr><td>Dil</td><td>Türkçe ya da İngilizce. Ölüm belgesi, mühürler, rapor damgaları ve dükkân tabelaları da dile göre değişir.</td></tr>
-      <tr><td>Bulut kaydı</td><td>Google Play Games ya da Steam Cloud ile kayıt.</td></tr>
-      <tr><td>Tam ekran, pencere boyutu, VSync</td><td>Yalnızca PC sürümünde.</td></tr>
-    </tbody>
-  </table></div>
-  <p>PC'de fare, klavye ve oyun kumandası desteklenir. Android'de oyun zaman zaman sizi Google Play'de değerlendirmeye davet eder; "Sonra" diyebilirsiniz.</p>
-</section>
-
-<section id="ipuclari">
-  <h2><span class="no">17 · MADDE</span>Yeni başlayanlar için ipuçları</h2>
-  <ul>
-    <li><b>Kota mühürle tutar, biçmeyle değil.</b> Çuvalı dolu bir stajyer kotayı kaçırabilir. Ay bitmeden ofise dönmeyi unutmayın.</li>
-    <li><b>Çanı duyunca bakın.</b> Ölüm çanı, birinin hazır olduğunu söyler; mini haritadaki kırmızı nokta da nerede olduğunu.</li>
-    <li><b>Çuval doluysa biçmeyi bırakmayın.</b> Biçme yine gecikmeyi önler; ruh kaçar ama kotadan düşmezsiniz.</li>
-    <li><b>Mükemmel mühür iki kat para demek.</b> İlk Mühür'lerinizi Geniş Hedef ve Mürekkep Kalitesi'ne yatırmak çabuk geri döner.</li>
-    <li><b>Katlar kalıcıdır, oda geliştirmeleri değil.</b> Terfiden önce kalan Mühür'ü kat açmaya harcayın.</li>
-    <li><b>Yatakhane erken açılmaya değer.</b> İskelet Kâtip siz dünyadayken mühürlemeye devam eder.</li>
-    <li><b>Patron ayına hazırlıklı girin.</b> Patron ayın ortasında gelir. O sırada çuvalda yer açık olsun.</li>
-    <li><b>Her bölgede yöre eşyalarını kovalayın.</b> Üçünü bulmak bir Nişan demek ve bu Nişan terfide kaybolmaz.</li>
-    <li><b>Reenkarnasyon ceza değil.</b> Kurbağa olmak komik; geri döndüğünüzde Ruh Tecrübesi ile biraz daha güçlüsünüz.</li>
-  </ul>
-</section>
-<section id="gizlilik">
-  <h2><span class="no">18 · MADDE</span>Gizlilik politikası / Privacy policy</h2>
-  <p class="muted">Son güncelleme: 26 Kasım 2026 · Geliştirici: SE Logic · İletişim: <a href="mailto:theselogic@gmail.com">theselogic@gmail.com</a></p>
-  <h3>Türkçe</h3>
-  <p><b>Toplanan veriler.</b> Department of Death (Ölüm Dairesi) kişisel veri toplamaz. Oyunda hesap açma, reklam, analitik veya takip aracı yoktur. Oyunun ilerlemesi (kayıt dosyası) ve ayarlar yalnızca cihazınızda saklanır.</p>
-  <p><b>Google Play Games / Steam.</b> Bu hizmetleri kullanırsanız başarımlarınız ve (açarsanız) bulut kaydınız ilgili platforma gönderilir. Bu veriler Google'ın veya Valve'ın kendi gizlilik politikalarına tabidir; SE Logic bu verileri ayrıca toplamaz veya saklamaz.</p>
-  <p><b>Değerlendirme.</b> "Değerlendir" butonu Google Play'in uygulama içi değerlendirme penceresini veya mağaza sayfasını açar. Puanınız doğrudan Google'a gider.</p>
-  <p><b>Çocuklar.</b> Oyun 13 yaş ve üzeri için tasarlanmıştır ve çocuklardan bilerek veri toplamaz.</p>
-  <p><b>Verilerinizi silmek.</b> Oyunu kaldırdığınızda cihazdaki kayıt ve ayarlar silinir. Play Games veya Steam verileriniz için ilgili hesabınızın ayarlarını kullanın.</p>
-  <p><b>Değişiklikler.</b> Bu politika değişirse güncel hali bu sayfada yayınlanır.</p>
-  <p><b>İletişim.</b> Sorularınız için: <a href="mailto:theselogic@gmail.com">theselogic@gmail.com</a></p>
-  <h3>English</h3>
-  <p><b>Data we collect.</b> Department of Death does not collect personal data. There are no accounts, ads, analytics or tracking in the game. Your progress (save file) and settings are stored only on your device.</p>
-  <p><b>Google Play Games / Steam.</b> If you use these services, your achievements and (if you turn it on) your cloud save are sent to that platform and are covered by Google's or Valve's own privacy policies. SE Logic does not collect or store this data separately.</p>
-  <p><b>Ratings.</b> The "Rate" button opens Google Play's in-app review or the store page. Your rating goes straight to Google.</p>
-  <p><b>Children.</b> The game is designed for ages 13 and up and does not knowingly collect data from children.</p>
-  <p><b>Deleting your data.</b> Uninstalling the game removes the save and settings from your device. For Play Games or Steam data, use your account settings there.</p>
-  <p><b>Changes.</b> If this policy changes, the current version is published on this page.</p>
-  <p><b>Contact.</b> Questions: <a href="mailto:theselogic@gmail.com">theselogic@gmail.com</a></p>
-</section>
-
-<footer>
-  Ölüm Dairesi / Department of Death · SE Logic. Ekran görüntüleri geliştirme sürümünden; çıkışta değişebilir. Bu sayfa tasarım belgeleri ve oyunun güncel kodundan derlendi (son güncelleme 26 Kasım 2026).
-</footer>
-</main>
+  <a class="scroll-cue" href="#oyun" aria-label="Aşağı kaydır"><span></span></a>
 </div>
 
-<script>
-document.querySelectorAll('.blur').forEach(function(el){
-  function t(){el.classList.toggle('on');}
-  el.addEventListener('click',t);
-  el.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});
-});
-</script>
+<!-- MEMO -->
+<section id="oyun">
+  <div class="wrap premise">
+    <div class="rv">
+      <article class="memo" lang="tr" aria-label="Dahili genelge">
+        <div class="mh"><span>Dahili Genelge</span><span>No. 4000/1</span></div>
+        <dl><dt>KİMDEN</dt><dd>Bay Kuzgun, Müdür Vekili</dd><dt>KİME</dt><dd>Yeni stajyer (sen)</dd><dt>KONU</dt><dd>Azrail'in tükenmişlik izni</dd></dl>
+        <p>Azrail 4000 yıl çalıştı. Sonra "Sebep: yoruldum" yazan bir form bıraktı ve ortadan kayboldu.</p>
+        <p>Kota beklemez. Sokaktaki kum saatleri dolmak üzere, elimizde de bir sen varsın. Tırpanını al, ağını unutma, mührü tam kırmızıda bas.</p>
+        <p>Gecikme olursa uyarı yazılır. Üç uyarıda reenkarnasyon.</p>
+        <div class="sig">B. Kuzgun</div>
+        <span class="seal" aria-hidden="true">ONAYLANDI</span>
+      </article>
+      <article class="memo" lang="en" aria-label="Internal memo">
+        <div class="mh"><span>Internal Memo</span><span>No. 4000/1</span></div>
+        <dl><dt>FROM</dt><dd>Mr. Corvin, Acting Director</dd><dt>TO</dt><dd>New intern (you)</dd><dt>RE</dt><dd>The Reaper's burnout leave</dd></dl>
+        <p>The Reaper worked for 4000 years. Then he left a form that said "Reason: tired" and vanished.</p>
+        <p>The quota does not wait. The hourglasses in the streets are running out, and all we have is you. Take the scythe, bring the net, and land the stamp on the red.</p>
+        <p>Overdue cases get a warning. Three warnings mean reincarnation.</p>
+        <div class="sig">M. Corvin</div>
+        <span class="seal" aria-hidden="true">APPROVED</span>
+      </article>
+    </div>
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Oyun hakkında</span><span lang="en">About the game</span></p>
+      <h2 class="h-xl"><span lang="tr">Ölüm kesin. Evrak işi ondan da kesin.</span><span lang="en">Death is certain. Paperwork is even more certain.</span></h2>
+      <p class="sub" lang="tr">Ölüm Dairesi, 2D gotik çizgi film tarzı piksel art ile çizilmiş, kısa oturumlara uygun aktif bir incremental. Sokakta biçersin, boşlukta süzülen ofis kulesinde mühürlersin; ay sonunda yalnızca mühürlenmiş ruhlar kotaya sayılır.</p>
+      <p class="sub" lang="en">Department of Death is an active incremental drawn in gothic cartoon pixel art, made for short sessions. You reap in the streets and stamp in an office tower floating in the void; at the end of the month only stamped souls count towards the quota.</p>
+      <div class="stats">
+        <div class="stat"><b>6</b><span lang="tr">bölge, her birinin kendi kuralı</span><span lang="en">regions, each with its own rules</span></div>
+        <div class="stat"><b>6</b><span lang="tr">rütbe, Stajyer'den Azrail Vekili'ne</span><span lang="en">ranks, Intern to Acting Reaper</span></div>
+        <div class="stat"><b>68</b><span lang="tr">Son Söz kartı</span><span lang="en">Last Words cards</span></div>
+        <div class="stat"><b>46</b><span lang="tr">başarım</span><span lang="en">achievements</span></div>
+      </div>
+    </div>
+  </div>
+</section>
 
-</body></html>
+<!-- FRAGMAN -->
+<section id="fragman" class="trailer">
+  <div class="wrap">
+    <div class="head rv">
+      <p class="eyebrow"><span lang="tr">Fragman</span><span lang="en">Trailer</span></p>
+      <h2 class="h-xl"><span lang="tr">İlk mesaine hoş geldin</span><span lang="en">Welcome to your first shift</span></h2>
+    </div>
+    <div class="screen rv" lang="tr"><video controls playsinline preload="none" poster="media/poster_tr.webp"><source src="media/trailer_tr.mp4" type="video/mp4">Tarayıcınız videoyu oynatamıyor.</video></div>
+    <div class="screen rv" lang="en"><video controls playsinline preload="none" poster="media/poster_en.webp"><source src="media/trailer_en.mp4" type="video/mp4">Your browser can't play this video.</video></div>
+  </div>
+</section>
+
+<!-- DÖNGÜ VE ÖZELLİKLER -->
+<section id="oynanis">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Oynanış</span><span lang="en">Gameplay</span></p>
+      <h2 class="h-xl"><span lang="tr">Biç. Yakala. Mühürle.</span><span lang="en">Reap. Catch. Stamp.</span></h2>
+      <p class="sub" lang="tr">Tek dokunuşla oynanan üç adımlık bir döngü. Her ay biraz daha hızlı, biraz daha kalabalık.</p>
+      <p class="sub" lang="en">A three-step loop you play with a single tap. Every month a little faster, a little more crowded.</p>
+    </div>
+    <div class="loop">
+      <article class="step rv"><img src="shots/ss1_t.webp" alt="Gotik köyde stajyer, kum saati kırmızı parlayan bir köylünün yanında" loading="lazy" width="800" height="450">
+        <div class="tx"><span class="n">01</span><h3><span lang="tr">Biç</span><span lang="en">Reap</span></h3>
+        <p lang="tr">Kum saati kırmızı parlayan kişiye dokun. Geç kalırsan vaka gecikir ve kotadan düşer.</p><p lang="en">Tap anyone whose hourglass glows red. Too late, and the case goes overdue and costs you quota.</p></div></article>
+      <article class="step rv"><img src="shots/ss4_t.webp" alt="Sisli şehirde kaçan mavi bir ruh ve stajyer" loading="lazy" width="800" height="450">
+        <div class="tx"><span class="n">02</span><h3><span lang="tr">Yakala</span><span lang="en">Catch</span></h3>
+        <p lang="tr">Ruhlar kaçar. Sıska, zırhlı, para kokan, sisli, boğulmuş, kedi kılıklı: her birinin kendi huyu var. Ağını at.</p><p lang="en">Souls run. Skinny, armored, money-scented, foggy, drowned, cat-shaped: each has its own trick. Throw the net.</p></div></article>
+      <article class="step rv"><img src="shots/ss2_t.webp" alt="Ofiste ölüm belgesi ve kırmızı onay mührü" loading="lazy" width="800" height="450">
+        <div class="tx"><span class="n">03</span><h3><span lang="tr">Mühürle</span><span lang="en">Stamp</span></h3>
+        <p lang="tr">Her ruhun bir ölüm belgesi var. Mührü tam kırmızıya denk getir: mükemmel mühür iki kat öder, seri kombo büyütür.</p><p lang="en">Every soul has a death certificate. Land the stamp on the red: a perfect stamp pays double, and a streak builds your combo.</p></div></article>
+    </div>
+
+    <div class="feat rv">
+      <div class="media"><img src="shots/ss5_t.webp" srcset="shots/ss5_t.webp 800w, shots/ss5.webp 1920w" sizes="(max-width:900px) 100vw, 640px" alt="Boşlukta süzülen ofis kulesi ve katları" loading="lazy" width="800" height="450"></div>
+      <div>
+        <p class="eyebrow"><span lang="tr">Ofis kulesi</span><span lang="en">The office tower</span></p>
+        <h3 class="h-lg"><span lang="tr">Kuleni kat kat büyüt</span><span lang="en">Build your tower floor by floor</span></h3>
+        <p class="sub" lang="tr">Boşlukta süzülen kuleye yeni katlar ekle. Her kat bir oda, her odanın kendi mini oyunu var.</p>
+        <p class="sub" lang="en">Add new floors to a tower floating in the void. Every floor is a room with its own mini-game.</p>
+        <ul lang="tr"><li>Kabul, Arşiv, İskelet Yatakhanesi, Muhasebe, Gizli Arşiv ve Kuzgun'un Balkonu</li><li>Ruh Ağacı'nda Biçme, Yakalama, Bürokrasi ve Personel dalları</li><li>Kazandığın Mühür ile kalıcı güç</li></ul>
+        <ul lang="en"><li>Reception, Archive, Skeleton Dormitory, Accounting, Secret Archive and the Crow's Balcony</li><li>Reaping, Catching, Bureaucracy and Staff branches on the Soul Tree</li><li>Spend Seals for lasting power</li></ul>
+      </div>
+    </div>
+
+    <div class="feat flip rv">
+      <div class="media">
+        <div class="stage">
+          <div class="ranks">
+            <figure><img class="px" src="img/sprite/rank_1.png" alt="" loading="lazy"><figcaption><span lang="tr">Stajyer</span><span lang="en">Intern</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/rank_2.png" alt="" loading="lazy"><figcaption><span lang="tr">Memur</span><span lang="en">Clerk</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/rank_3.png" alt="" loading="lazy"><figcaption><span lang="tr">Şef</span><span lang="en">Chief</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/rank_4.png" alt="" loading="lazy"><figcaption><span lang="tr">Kıdemli Şef</span><span lang="en">Senior Chief</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/rank_5.png" alt="" loading="lazy"><figcaption><span lang="tr">Müdür</span><span lang="en">Director</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/rank_6.png" alt="" loading="lazy"><figcaption><span lang="tr">Azrail Vekili</span><span lang="en">Acting Reaper</span></figcaption></figure>
+          </div>
+          <div class="crew">
+            <figure><img class="px" src="img/sprite/st_reaper.png" alt="" loading="lazy"><figcaption><span lang="tr">İskelet Biçici</span><span lang="en">Skeleton Reaper</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/st_hound.png" alt="" loading="lazy"><figcaption><span lang="tr">Hayalet Tazı</span><span lang="en">Ghost Hound</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/st_clerk.png" alt="" loading="lazy"><figcaption><span lang="tr">İskelet Kâtip</span><span lang="en">Skeleton Clerk</span></figcaption></figure>
+            <figure><img class="px" src="img/sprite/st_carrier.png" alt="" loading="lazy"><figcaption><span lang="tr">İskelet Taşıyıcı</span><span lang="en">Skeleton Carrier</span></figcaption></figure>
+          </div>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow"><span lang="tr">Kariyer</span><span lang="en">Career</span></p>
+        <h3 class="h-lg"><span lang="tr">Stajyerden Azrail Vekili'ne</span><span lang="en">From Intern to Acting Reaper</span></h3>
+        <p class="sub" lang="tr">Her ayın sonunda Bay Kuzgun kotana bakar. Bölgenin sonunda dev bir patron ruh belirir: onu yakala, mühürle, terfi et. Her rütbede cübben ve görevin değişir.</p>
+        <p class="sub" lang="en">At the end of every month Mr. Corvin checks your quota. At the end of each region a giant boss soul appears: catch it, stamp it, get promoted. Every rank brings a new robe and a new post.</p>
+        <ul lang="tr"><li>İskelet personel tut: Biçici sokakta, Tazı kaçanların peşinde, Kâtip masada</li><li>Üç uyarı mı? Reenkarnasyon. Bürokrasi affetmez.</li></ul>
+        <ul lang="en"><li>Hire skeleton staff: the Reaper in the street, the Hound after runaways, the Clerk at the desk</li><li>Three warnings? Reincarnation. Bureaucracy never forgives.</li></ul>
+      </div>
+    </div>
+
+    <div class="feat rv">
+      <div class="media"><img src="img/20_room_gizli_arsiv.webp" alt="Gizli Arşiv odası: ipucu panosu ve dosyalar" loading="lazy" width="1280" height="720"></div>
+      <div>
+        <p class="eyebrow"><span lang="tr">Gizem</span><span lang="en">Mystery</span></p>
+        <h3 class="h-lg"><span lang="tr">Dosya 0001'i çöz</span><span lang="en">Crack File 0001</span></h3>
+        <p class="sub" lang="tr">Her ölü geride bir Son Söz bırakır. Kartları topla, ipuçlarını Gizli Arşiv'de birleştir ve kayıp Azrail'in nerede saklandığını bul. Finalde vereceğin karar hikâyenin sonunu belirler.</p>
+        <p class="sub" lang="en">Every soul leaves Last Words behind. Collect the cards, piece the clues together in the Secret Archive and find where the missing Reaper is hiding. Your choice at the finale decides how the story ends.</p>
+        <ul lang="tr"><li>68 kartlık Son Sözler albümü</li><li>Hikâyeden sonra Ebedi Mesai: kota her ay büyür, rekorunu kır</li></ul>
+        <ul lang="en"><li>A 68-card Last Words album</li><li>After the story, Eternal Overtime: the quota grows every month. Beat your record.</li></ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BÖLGELER -->
+<section id="bolgeler" class="regions">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Bölgeler</span><span lang="en">Regions</span></p>
+      <h2 class="h-xl"><span lang="tr">Altı bölge, altı ayrı kural</span><span lang="en">Six regions, six sets of rules</span></h2>
+      <p class="sub" lang="tr">Her terfi seni yeni bir göreve gönderir. Her bölgenin altında da hayvan ruhlarıyla dolu bir kanalizasyon bekler.</p>
+      <p class="sub" lang="en">Every promotion sends you to a new post. Under every region, a sewer full of animal souls is waiting.</p>
+    </div>
+    <div class="rgrid">
+      <article class="region rv"><img src="img/73_idle_region_1.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">01 · Stajyer</span><span lang="en">01 · Intern</span></span><h3><span lang="tr">Gotik Köy</span><span lang="en">Gothic Village</span></h3><p lang="tr">Eğri çatılar, fırıncılar, nineler. Temel döngü burada öğrenilir.</p><p lang="en">Crooked roofs, bakers and grannies. Where you learn the basic loop.</p></div></article>
+      <article class="region rv"><img src="img/75_items_region_2.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">02 · Memur</span><span lang="en">02 · Clerk</span></span><h3><span lang="tr">Sisli Şehir</span><span lang="en">Foggy City</span></h3><p lang="tr">Fabrika bacaları ve gaz lambaları. Sisin içinde bazı ruhlar görünmez olur.</p><p lang="en">Chimneys and gas lamps. In the fog, some souls turn invisible.</p></div></article>
+      <article class="region rv"><img src="img/73_idle_region_3.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">03 · Şef</span><span lang="en">03 · Chief</span></span><h3><span lang="tr">Savaş Alanı</span><span lang="en">Battlefield</span></h3><p lang="tr">Ölümler borazan sesiyle, dalgalar halinde gelir: üç kişi birden.</p><p lang="en">Deaths come in waves at the sound of a bugle: three at once.</p></div></article>
+      <article class="region rv"><img src="img/42_region_4.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">04 · Kıdemli Şef</span><span lang="en">04 · Senior Chief</span></span><h3><span lang="tr">Fırtınalı Okyanus</span><span lang="en">Stormy Ocean</span></h3><p lang="tr">Dalgalar güverteyi yalar, boğulmuş ruhlar suya dalar.</p><p lang="en">Waves sweep the deck and drowned souls dive under.</p></div></article>
+      <article class="region rv"><img src="img/42_region_5.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">05 · Müdür</span><span lang="en">05 · Director</span></span><h3><span lang="tr">Antik Krallık</span><span lang="en">Ancient Kingdom</span></h3><p lang="tr">Çöl ve piramitler. Ölüler pek de ölü kalmaz; mumyalar geri kalkar.</p><p lang="en">Desert and pyramids. The dead don't stay dead: mummies rise again.</p></div></article>
+      <article class="region rv"><img src="img/42_region_6.webp" alt="" loading="lazy"><div class="tx"><span class="k"><span lang="tr">06 · Azrail Vekili</span><span lang="en">06 · Acting Reaper</span></span><h3><span lang="tr">Ölmeyenlerin Diyarı</span><span lang="en">Realm of the Undying</span></h3><p lang="tr">Burada zaman bile kararsız. Kum saatleri geri akar.</p><p lang="en">Even time can't make up its mind here. Hourglasses flow backwards.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- KADRO -->
+<section id="karakterler">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Kadro</span><span lang="en">The staff</span></p>
+      <h2 class="h-xl"><span lang="tr">Dairenin çalışanları</span><span lang="en">Meet the department</span></h2>
+    </div>
+    <div class="cast">
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_stajyer.png" alt="" loading="lazy"></div><div><h3><span lang="tr">Stajyer</span><span lang="en">The Intern</span></h3><div class="role"><span lang="tr">Sen · Dosya No. 2.847.113</span><span lang="en">You · File No. 2,847,113</span></div><p lang="tr">Yeni ölmüş sıradan bir memur. Kocaman kafatası, paslı dev tırpanı. Beceriksiz ama azimli.</p><p lang="en">A freshly deceased office worker. Huge skull, rusty oversized scythe. Clumsy, but determined.</p></div></article>
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_kuzgun.png" alt="" loading="lazy"></div><div><h3><span lang="tr">Bay Kuzgun</span><span lang="en">Mr. Corvin</span></h3><div class="role"><span lang="tr">Müdür Vekili</span><span lang="en">Acting Director</span></div><p lang="tr">Kravatlı iskelet kuzgun. Kota takıntılı, huysuz; her lafını bir yönetmelik maddesine bağlar.</p><p lang="en">A skeletal crow in a tie. Quota-obsessed and grumpy; every sentence cites a regulation.</p></div></article>
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_nermin.png" alt="" loading="lazy"></div><div><h3><span lang="tr">Nermin Hanım</span><span lang="en">Ms. Nermin</span></h3><div class="role"><span lang="tr">İnsan Kaynakları</span><span lang="en">Human Resources</span></div><p lang="tr">Aşırı nazik, aşırı bürokrat bir hayalet. Her şeye form ister, herkese "canım" der.</p><p lang="en">An overly kind, overly bureaucratic ghost. Wants a form for everything and calls everyone "dear".</p></div></article>
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_kamil.png" alt="" loading="lazy"></div><div><h3><span lang="tr">Kemikçi Kâmil</span><span lang="en">Bony Kamil</span></h3><div class="role"><span lang="tr">Arşivci</span><span lang="en">Archivist</span></div><p lang="tr">Dedikoducu, koleksiyoncu ve komplo teorisyeni bir iskelet. Son Sözler kartlarına bayılır.</p><p lang="en">A gossiping, collecting, conspiracy-minded skeleton. Lives for Last Words cards.</p></div></article>
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_ekrem.png" alt="" loading="lazy"></div><div><h3><span lang="tr">Ebedi Ekrem</span><span lang="en">Eternal Ekrem</span></h3><div class="role"><span lang="tr">Hiç yaşlanmayan adam</span><span lang="en">The man who never ages</span></div><p lang="tr">Her bölgede başka kılıkta karşına çıkan sakin bir bakkal. "Acele etme. Burada zaman bekler."</p><p lang="en">A calm shopkeeper who turns up in every region in a new disguise. "No rush. Time waits here."</p></div></article>
+      <article class="who rv"><div class="pic"><img class="px" src="img/sprite/p_muhasebeci.png" alt="" loading="lazy"></div><div><h3><span lang="tr">İskelet Muhasebeci</span><span lang="en">Skeleton Accountant</span></h3><div class="role"><span lang="tr">Muhasebe katı</span><span lang="en">Accounting floor</span></div><p lang="tr">Yeşil siperlikli, abaküs başından kalkmayan iskelet. Her kuruşun hesabını sorar.</p><p lang="en">A green-visored skeleton glued to his abacus. Every coin must be accounted for.</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- GALERİ -->
+<section id="galeri" style="padding-top:24px">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Galeri</span><span lang="en">Gallery</span></p>
+      <h2 class="h-xl"><span lang="tr">Ekran görüntüleri</span><span lang="en">Screenshots</span></h2>
+    </div>
+    <div class="gal rv">
+      <a href="shots/ss2.webp" data-lb><img src="shots/ss2_t.webp" alt="Ofiste ölüm belgesini mühürleme" loading="lazy"></a>
+      <a href="shots/ss1.webp" data-lb><img src="shots/ss1_t.webp" alt="Gotik köyde biçme" loading="lazy"></a>
+      <a href="shots/ss3.webp" data-lb><img src="shots/ss3_t.webp" alt="Değirmenin önünde stajyer ve iskelet personel" loading="lazy"></a>
+      <a href="shots/ss4.webp" data-lb><img src="shots/ss4_t.webp" alt="Sisli şehirde kaçan ruh" loading="lazy"></a>
+      <a href="shots/ss6.webp" data-lb><img src="shots/ss6_t.webp" alt="Fırtınalı okyanusta gemiler" loading="lazy"></a>
+      <a href="shots/ss5.webp" data-lb><img src="shots/ss5_t.webp" alt="Ofis kulesi ve kat inşası" loading="lazy"></a>
+      <a href="shots/ss7.webp" data-lb><img src="shots/ss7_t.webp" alt="Arşiv odası: dosyaları çekmecelere ayırma" loading="lazy"></a>
+      <a href="shots/ss8.webp" data-lb><img src="shots/ss8_t.webp" alt="Soluk ve sisli Ölmeyenlerin Diyarı" loading="lazy"></a>
+    </div>
+  </div>
+</section>
+
+<!-- ÇAĞRI -->
+<div class="band">
+  <div class="wrap rv">
+    <div class="seal-big" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C7 2 4 5.6 4 9.8c0 2.6 1.2 4.4 3 5.5V18a1 1 0 0 0 1 1h1v2h2v-2h2v2h2v-2h1a1 1 0 0 0 1-1v-2.7c1.8-1.1 3-2.9 3-5.5C20 5.6 17 2 12 2zM9 13a2 2 0 1 1 0-4 2 2 0 0 1 0 4zm6 0a2 2 0 1 1 0-4 2 2 0 0 1 0 4z"/></svg></div>
+    <h2 class="h-xl"><span lang="tr">Kota seni bekliyor</span><span lang="en">The quota is waiting</span></h2>
+    <p class="sub" lang="tr">Ölüm Dairesi, SE Logic'ten Android ve PC için geliyor. Türkçe ve İngilizce.</p>
+    <p class="sub" lang="en">Department of Death is coming to Android and PC from SE Logic. In English and Turkish.</p>
+    <div class="plat">
+      <span class="chip"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 3.5v17l9.2-8.5zM14.6 13.3l2.4 2.2-10 5.6zM17 8.5l-2.4 2.2L7 2.9zM18.3 9.3 21 12l-2.7 2.7-2.6-2.7z"/></svg>Google Play <em><span lang="tr">Yakında</span><span lang="en">Soon</span></em></span>
+      <span class="chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg>Steam <em><span lang="tr">Yakında</span><span lang="en">Soon</span></em></span>
+    </div>
+  </div>
+</div>
+
+<!-- BASIN -->
+<section id="basin">
+  <div class="wrap">
+    <div class="rv">
+      <p class="eyebrow"><span lang="tr">Basın kiti</span><span lang="en">Press kit</span></p>
+      <h2 class="h-xl"><span lang="tr">Basın ve içerik üreticileri için</span><span lang="en">For press and creators</span></h2>
+    </div>
+    <div class="press">
+      <div class="rv">
+        <p class="quote" lang="tr">Emekli Azrail'in yerine alınan stajyer olarak ruhları biçtiğin, belgelerini mühürlediğin ve kayıp patronun sırrını çözdüğün kara mizahlı bir incremental.</p>
+        <p class="quote" lang="en">A darkly funny incremental where you are the intern hired to replace the retired Grim Reaper: reap souls, stamp their paperwork and solve the mystery of your missing predecessor.</p>
+        <div class="facts"><dl>
+          <dt><span lang="tr">Geliştirici</span><span lang="en">Developer</span></dt><dd>SE Logic</dd>
+          <dt><span lang="tr">Platform</span><span lang="en">Platforms</span></dt><dd>Android (Google Play), Windows (Steam)</dd>
+          <dt><span lang="tr">Tür</span><span lang="en">Genre</span></dt><dd><span lang="tr">Aktif incremental, hafif yönetim, finali olan hikâye</span><span lang="en">Active incremental, light management, story with a finale</span></dd>
+          <dt><span lang="tr">Dil</span><span lang="en">Languages</span></dt><dd><span lang="tr">Türkçe, İngilizce</span><span lang="en">English, Turkish</span></dd>
+          <dt><span lang="tr">Motor</span><span lang="en">Engine</span></dt><dd>Godot 4</dd>
+          <dt><span lang="tr">Çıkış</span><span lang="en">Release</span></dt><dd><span lang="tr">Yakında</span><span lang="en">Coming soon</span></dd>
+          <dt><span lang="tr">İletişim</span><span lang="en">Contact</span></dt><dd><a href="mailto:theselogic@gmail.com">theselogic@gmail.com</a></dd>
+        </dl></div>
+      </div>
+      <div class="rv">
+        <p class="sub" lang="tr">Logolar, ana görsel ve ekran görüntüleri haber ve içerik üretimi için serbestçe kullanılabilir. Daha yüksek çözünürlük ya da test anahtarı için yazın.</p>
+        <p class="sub" lang="en">Logos, key art and screenshots are free to use for coverage and videos. Write to us for higher resolutions or a test key.</p>
+        <ul class="dl">
+          <li><a href="assets/logo_tr.png" download><span lang="tr">Logo, Türkçe (şeffaf PNG)</span><span lang="en">Logo, Turkish (transparent PNG)</span><small>807×300</small></a></li>
+          <li><a href="assets/logo_en.png" download><span lang="tr">Logo, İngilizce (şeffaf PNG)</span><span lang="en">Logo, English (transparent PNG)</span><small>1026×264</small></a></li>
+          <li><a href="assets/keyart.png" download><span lang="tr">Ana görsel, yazısız</span><span lang="en">Key art, no text</span><small>3840×1240</small></a></li>
+          <li><a href="assets/og.jpg" download><span lang="tr">Kapsül görseli</span><span lang="en">Capsule art</span><small>1232×706</small></a></li>
+          <li><a href="assets/icon.png" download><span lang="tr">Uygulama ikonu</span><span lang="en">App icon</span><small>256×256</small></a></li>
+          <li><a href="shots/ss2.webp" download><span lang="tr">Ekran görüntüleri (galerideki tümü 1920×1080)</span><span lang="en">Screenshots (all gallery images are 1920×1080)</span><small>WEBP</small></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <a class="brand" href="index.html"><img src="assets/favicon.png" alt="" width="34" height="34"><b><span lang="tr">Ölüm Dairesi</span><span lang="en">Department of Death</span></b></a>
+        <p class="tag" lang="tr">Ölüm kesin. Evrak işi ondan da kesin.</p>
+        <p class="tag" lang="en">Death is certain. Paperwork is even more certain.</p>
+      </div>
+      <div>
+        <h4><span lang="tr">Site</span><span lang="en">Site</span></h4>
+        <ul>
+          <li><a href="#oyun"><span lang="tr">Oyun</span><span lang="en">Game</span></a></li>
+          <li><a href="wiki.html">Wiki <span lang="en">(Turkish)</span></a></li>
+          <li><a href="#basin"><span lang="tr">Basın kiti</span><span lang="en">Press kit</span></a></li>
+          <li><a href="privacy.html"><span lang="tr">Gizlilik politikası</span><span lang="en">Privacy policy</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h4><span lang="tr">İletişim</span><span lang="en">Contact</span></h4>
+        <ul>
+          <li><a href="mailto:theselogic@gmail.com">theselogic@gmail.com</a></li>
+          <li><span lang="tr">SE Logic, bağımsız oyun stüdyosu</span><span lang="en">SE Logic, independent game studio</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal"><span>© 2026 SE Logic</span><span lang="tr">Ekran görüntüleri geliştirme sürümünden alınmıştır.</span><span lang="en">Screenshots are from a development build.</span></div>
+  </div>
+</footer>
+
+<div id="lb" hidden role="dialog" aria-modal="true" aria-label="Ekran görüntüsü">
+  <img src="" alt="">
+  <button class="lb-x" type="button" aria-label="Kapat">✕</button>
+  <button class="lb-prev" type="button" aria-label="Önceki">‹</button>
+  <button class="lb-next" type="button" aria-label="Sonraki">›</button>
+  <div class="lb-cap"></div>
+</div>
+
+<script src="assets/site.js"></script>
+</body>
+</html>
