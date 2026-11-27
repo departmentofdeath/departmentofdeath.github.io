@@ -180,6 +180,17 @@ section{padding:96px 0}
 .dl a{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:var(--stone);border:1px solid var(--slate);border-radius:8px;color:var(--bone);text-decoration:none}
 .dl a:hover{border-color:var(--seal)}
 .dl a small{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.1em;color:var(--ash);white-space:nowrap}
+
+/* Yeni mekanikler */
+.mech{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}
+@media (max-width:620px){.mech{grid-template-columns:minmax(0,1fr)}}
+.mech div{background:var(--stone);border:1px solid var(--slate);border-radius:8px;padding:14px 16px}
+.mech b{display:block;font-family:var(--f-display);font-weight:600;font-size:1.25rem;line-height:1.1;margin-bottom:4px}
+.mech span{color:var(--ash);font-size:.92rem;line-height:1.4;display:block}
+.mech-row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px;align-items:center;margin-top:88px}
+@media (max-width:900px){.mech-row{grid-template-columns:minmax(0,1fr);gap:24px;margin-top:64px}}
+.mech-row .media img{display:block;width:100%;border-radius:10px;border:1px solid var(--slate-2);box-shadow:0 30px 60px -28px rgba(0,0,0,.8)}
+.badge-new{font-family:var(--f-pixel);font-size:.7rem;letter-spacing:.1em;background:var(--seal);color:#fff;padding:2px 7px;border-radius:3px;margin-left:10px;vertical-align:middle}
 </style>
 </head>
 <body>
@@ -261,7 +272,7 @@ section{padding:96px 0}
         <div class="stat"><b>6</b><span lang="tr">bölge, her birinin kendi kuralı</span><span lang="en">regions, each with its own rules</span></div>
         <div class="stat"><b>6</b><span lang="tr">rütbe, Stajyer'den Azrail Vekili'ne</span><span lang="en">ranks, Intern to Acting Reaper</span></div>
         <div class="stat"><b>68</b><span lang="tr">Son Söz kartı</span><span lang="en">Last Words cards</span></div>
-        <div class="stat"><b>46</b><span lang="tr">başarım</span><span lang="en">achievements</span></div>
+        <div class="stat"><b>55</b><span lang="tr">başarım</span><span lang="en">achievements</span></div>
       </div>
     </div>
   </div>
@@ -298,6 +309,24 @@ section{padding:96px 0}
       <article class="step rv"><img src="shots/ss2_t.webp" alt="Ofiste ölüm belgesi ve kırmızı onay mührü" loading="lazy" width="800" height="450">
         <div class="tx"><span class="n">03</span><h3><span lang="tr">Mühürle</span><span lang="en">Stamp</span></h3>
         <p lang="tr">Her ruhun bir ölüm belgesi var. Mührü tam kırmızıya denk getir: mükemmel mühür iki kat öder, seri kombo büyütür.</p><p lang="en">Every soul has a death certificate. Land the stamp on the red: a perfect stamp pays double, and a streak builds your combo.</p></div></article>
+    </div>
+
+    <div class="mech-row rv">
+      <div>
+        <p class="eyebrow"><span lang="tr">Her ay başka bir mesai</span><span lang="en">No two months alike</span><span class="badge-new" lang="tr">YENİ</span><span class="badge-new" lang="en">NEW</span></p>
+        <h3 class="h-lg"><span lang="tr">Seri yap, pazarlık et, kaza düzenle</span><span lang="en">Chain reaps, haggle, stage accidents</span></h3>
+        <p class="sub" lang="tr">Döngüye her ekranda küçük riskler ve seçimler eklendi. Yalvaran adama süre mi vereceksin, yoksa yükü tam üstüne mi düşüreceksin?</p>
+        <p class="sub" lang="en">Every screen now has small risks and choices. Will you give the pleading man more time, or drop the load right on top of him?</p>
+        <div class="mech">
+          <div><b><span lang="tr">Hasat Serisi</span><span lang="en">Reap Streak</span></b><span lang="tr">Art arda biç, ek Mühür kazan. 12'de "Kıyamet Memuru!"</span><span lang="en">Reap back to back for bonus Seals. At 12: "Apocalypse Clerk!"</span></div>
+          <div><b><span lang="tr">Son Pazarlık</span><span lang="en">Last Bargain</span></b><span lang="tr">Yalvarana süre ver. Dürüstse minnettar, yalancıysa kaçar.</span><span lang="en">Grant the pleader time. Honest ones are grateful; liars run.</span></div>
+          <div><b><span lang="tr">Talihsiz Kaza</span><span lang="en">Tragic Accident</span></b><span lang="tr">Makaradaki yükü düşür, altındaki hazır herkesi biç.</span><span lang="en">Drop a crane's load and reap everyone ready beneath it.</span></div>
+          <div><b><span lang="tr">Kuzgunun Emirleri</span><span lang="en">The Crow's Orders</span></b><span lang="tr">Her ay iki yan görev; ödülü Mühür ve Akçe.</span><span lang="en">Two side orders a month, paid in Seals and Akçe.</span></div>
+          <div><b><span lang="tr">Ay Olayları</span><span lang="en">Month Events</span></b><span lang="tr">Veba Haftası, Düğün Sezonu, Dolunay, Müfettiş Denetimi…</span><span lang="en">Plague Week, Wedding Season, Full Moon, Inspection…</span></div>
+          <div><b><span lang="tr">Acil Formlar</span><span lang="en">Urgent Forms</span></b><span lang="tr">Acil form üç kat öder; çift nüshada iki kez mühür bas.</span><span lang="en">Urgent forms pay triple; double copies need two stamps.</span></div>
+        </div>
+      </div>
+      <div class="media"><img src="img/93_fun_crane_landed.webp" alt="Makaradan düşen yük iki kişiyi biçiyor, Kader zinciri ve Toplu Tören yazıları" loading="lazy" width="1280" height="720"></div>
     </div>
 
     <div class="feat rv">
